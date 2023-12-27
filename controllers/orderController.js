@@ -28,23 +28,29 @@ const getOrders = async (req, res) => {
   const createOrder = async (req, res, next) => {
     try {
       const {
+        transactionID,
         senderName,
         senderAddress,
         senderPhoneNumber,
-        packageType,
         receiverName,
         receiverAddress,
         reveiverPhoneNumber,
+        packageType,
+        packageWeight,
+        expectedSendDate
       } = req.body;
       if (
         !(
+          transactionID &&
           senderName &&
           senderAddress &&
           senderPhoneNumber &&
-          packageType &&
           receiverName &&
           receiverAddress &&
-          reveiverPhoneNumber
+          reveiverPhoneNumber &&
+          packageType &&
+          packageWeight &&
+          expectedSendDate
         )
       ) {
         res.status(400).json({
@@ -58,7 +64,7 @@ const getOrders = async (req, res) => {
           console.log(err);
           res.status(400).json({ message: "Error" });
         } else {
-          res.send({ message: "Successful" });
+          res.send({ message: "Success!" });
         }
       });
     } catch (err) {
@@ -66,51 +72,48 @@ const getOrders = async (req, res) => {
     }
   };
   
-  const updateProductOrder = async (req, res, next) => {
-    const categoryId = req.params.id;
+  const updateOrder = async (req, res, next) => {
+    const orderId = req.params.id;
     try {
-      let isExisted = await categoryService.checkOrderIdExists(
-        categoryId
+      let isExisted = await orderService.checkOrderIdExists(
+        orderId
       );
   
       if (!isExisted) {
         res.status(404).send({ message: "Order not found" });
         return;
       }
-      const updateOrder = new Order({
-        ...req.body,
-        categoryName: req.body?.categoryName,
-      });
-      categoryService.updateProductOrder(
-        categoryId,
+      const updateOrder = new Order(req.body);
+      orderService.updateOrder(
+        orderId,
         updateOrder,
         (err, result) => {
           if (err) {
             next(err);
           } else {
-            res.send({ message: "Edit product detail" });
+            res.send({ message: "Edit order detail" });
           }
         }
       );
     } catch (error) {}
   };
   
-  // Delete a product category by ID
+  // Delete an order by ID
   const deleteOrder = async (req, res) => {
     try {
-      const categoryId = req.params.id;
-      let isExisted = await categoryService.checkOrderIdExists(
-        categoryId
+      const orderId = req.params.id;
+      let isExisted = await orderService.checkOrderIdExists(
+        orderId
       );
       if (!isExisted) {
         res.status(404).send({ message: "Order not found" });
         return;
       }
-      await categoryService.deleteOrder(categoryId, (err, result) => {
+      await orderService.deleteOrder(orderId, (err, result) => {
         if (err) {
           next(err);
         } else {
-          res.send({ msg: "Delete succesful" });
+          res.send({ msg: "Delete Success!" });
         }
       });
     } catch (err) {
@@ -122,7 +125,7 @@ const getOrders = async (req, res) => {
     getOrders,
     getSingleOrder,
     createOrder,
-    updateProductOrder,
+    updateOrder,
     deleteOrder,
   };
   

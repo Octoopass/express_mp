@@ -1,14 +1,16 @@
 const connection = require("../databases/mysql");
 
 var Order = function (order = {}) {
-  this.orderID = order.orderId;
   this.senderName = order.senderName;
-  this.receiverName = order.receiverName;
   this.senderAddress = order.senderAddress;
+  this.senderPhoneNumber = order.senderPhoneNumber;
+  this.receiverName = order.receiverName;
   this.receiverAddress = order.receiverAddress;
   this.receiverPhoneNumber = order.receiverPhoneNumber;
-  this.type = order.type;
-  this.weight = order.weight;
+  this.packageType = order.packageType;
+  this.packageWeight = order.packageWeight;
+  this.shippingFee = order.shippingFee;
+  this.shipStatus = order.shipStatus;
 };
 
 const orderService = {

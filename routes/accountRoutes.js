@@ -17,11 +17,11 @@ const {
 } = require("../controllers/accountController");
 
 router.post("/auth", login);
-router.post("/logout", authorization, logout);
-router.post("/", [authorization, checkRole(["admin"])], createAccount);
+router.post("/logout",  logout);
+router.post("/", createAccount);
 router.get("/", getAccounts);
-router.get("/profile", authorization, getAccountDetail);
+router.get("/profile", getAccountDetail);
 router.put("/:id", updateAccount);
-router.delete("/:id", [authorization, checkRole(["admin"])], deleteAccount);
+router.delete("/:id", deleteAccount);
 
 module.exports = router;
