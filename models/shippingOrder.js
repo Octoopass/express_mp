@@ -11,7 +11,7 @@ var ShippingOrder = function (shippingOrder = {}) {
 };
 
 const shippingOrderService = {
-  getShippingOrders: ({ branchId = undefined }) =>
+  getShippingOrders: ({ branchId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
@@ -19,6 +19,8 @@ const shippingOrderService = {
           left join Shipping_Branch B on B.branchId = O.branchId 
           group by O.orderID
           ${branchId ? `having O.branchId=${branchId}` : ""}
+          ${hubId ? `having T.hubID=${hubId}` : ""}
+          ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
         `,
         (error, results) => {
           if (error) {

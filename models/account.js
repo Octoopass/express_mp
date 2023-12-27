@@ -19,7 +19,7 @@ var Account = function (account = {}) {
 const accountService = {
   auth: (data, callback) => {
     connection.query(
-      "SELECT * FROM Account WHERE Username = ?",
+      "SELECT * FROM account WHERE Username = ?",
       [data?.username, data?.password],
       callback
     );
@@ -27,7 +27,7 @@ const accountService = {
   getTotalAccount: (search = "") =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(AccountID) as total FROM Account        
+        `SELECT COUNT(AccountID) as total FROM account        
         where concat(FullName, Email, Username) LIKE '%${search}%'
         `,
         (error, results) => {
@@ -46,7 +46,7 @@ const accountService = {
         A.transactionID as transactionID, T.transactionName as transactionName, 
         A.hubID as hubID, H.hubName as hubName,
         Position, CreateDate
-      from Account as A  
+      from account as A  
       left join transactionpoint as T on T.transactionID = A.transactionID
       left join hub as H on H.hubID = A.hubID
       where concat(FullName, Email, Username) LIKE '%${search}%'
@@ -64,7 +64,7 @@ const accountService = {
           A.transactionID as transactionID, T.transactionName as transactionName, 
           A.hubID as hubID, H.hubName as hubName,
           Position, CreateDate
-        from Account as A
+        from account as A
         left join transactionpoint as T on T.transactionID = A.transactionID
         left join hub as H on H.hubID = A.hubID
         where A.AccountID = '${id}'
@@ -83,7 +83,7 @@ const accountService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-        SELECT Position FROM Account
+        SELECT Position FROM account
         WHERE accountID = '${id}'
         `,
         (error, results) => {
@@ -96,7 +96,7 @@ const accountService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-        SELECT EXISTS(select * from Account
+        SELECT EXISTS(select * from account
         where Email = '${email}') as isExisted
       `,
         (error, results) => {
@@ -111,7 +111,7 @@ const accountService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-        SELECT EXISTS(select * from Account
+        SELECT EXISTS(select * from account
         where Username = '${username}') as isExisted
       `,
         (error, results) => {
@@ -123,17 +123,17 @@ const accountService = {
       );
     }),
   createAccount: (newAccount, callback) => {
-    connection.query(`INSERT INTO Account set ?`, newAccount, callback);
+    connection.query(`INSERT INTO account set ?`, newAccount, callback);
   },
   updateAccount: (id, updateAccount, callback) => {
     connection.query(
-      `UPDATE Account set ? WHERE AccountID = ${id}`,
+      `UPDATE account set ? WHERE AccountID = ${id}`,
       updateAccount,
       callback
     );
   },
   deleteAccount: (id, callback) => {
-    connection.query(`DELETE FROM Account WHERE AccountID = ${id}`, callback);
+    connection.query(`DELETE FROM account WHERE AccountID = ${id}`, callback);
   },
 };
 

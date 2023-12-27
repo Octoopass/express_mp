@@ -47,9 +47,9 @@ const transactionPointService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-      SELECT EXISTS(select * from transactionpoint
-      where transactionID = '${id}') as isExisted
-    `,
+        SELECT EXISTS(select * from transactionpoint
+        where transactionID = '${id}') as isExisted
+        `,
         (error, results) => {
           if (error) {
             return reject(error);

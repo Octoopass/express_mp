@@ -32,7 +32,7 @@ const createHub = async (req, res, next) => {
 const updateHub = async (req, res, next) => {
   const hubId = req.params.id;
   try {
-    let isExisted = await hubService.checkhubIdExists(hubId);
+    let isExisted = await hubService.checkHubIdExists(hubId);
 
     if (!isExisted) {
       res.status(404).send({ message: "Hub not found" });
@@ -54,7 +54,7 @@ const updateHub = async (req, res, next) => {
 const deleteHub = async (req, res, next) => {
   const hubId = req.params.id;
   try {
-    let isExisted = await hubService.checkhubIdExists(hubId);
+    let isExisted = await hubService.checkHubIdExists(hubId);
 
     if (!isExisted) {
       res.status(404).send({ message: "Hub not found" });

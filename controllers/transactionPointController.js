@@ -3,8 +3,11 @@ const {
   transactionPointService,
 } = require("../models/transactionPoint");
 
+const { hubService } = require("../models/hub");
+
 const getTransactionPoints = async (req, res) => {
-  const transactionPoints = await transactionPointService.getTransactionPoints();
+  const transactionPoints =
+    await transactionPointService.getTransactionPoints();
 
   res.send({
     data: transactionPoints,
@@ -20,6 +23,14 @@ const createTransactionPoint = async (req, res, next) => {
       });
       return;
     }
+
+    let isExisted = await hubService.checkHubIdExists(hubID);
+
+    if (!isExisted) {
+      res.status(404).send({ message: "Hub not found" });
+      return;
+    }
+
     transactionPointService.createTransactionPoint(req.body, (err, result) => {
       if (err) {
         next(err);
@@ -35,13 +46,28 @@ const createTransactionPoint = async (req, res, next) => {
 const updateTransactionPoint = async (req, res, next) => {
   const transactionId = req.params.id;
   try {
-    let isExisted = await transactionPointService.checkTransactionIdExists(transactionId);
+    let isExisted = await transactionPointService.checkTransactionIdExists(
+      transactionId
+    );
 
     if (!isExisted) {
       res.status(404).send({ message: "TransactionPoint not found" });
       return;
     }
+
     const updateTransactionPoint = new TransactionPoint(req.body);
+
+    if (updateTransactionPoint.hubId) {
+      isExisted = await hubService.checkHubIdExists(
+        updateTransactionPoint.hubId
+      );
+
+      if (!isExisted) {
+        res.status(404).send({ message: "Hub not found" });
+        return;
+      }
+    }
+
     transactionPointService.updateTransactionPoint(
       transactionId,
       updateTransactionPoint,
@@ -68,13 +94,16 @@ const deleteTransactionPoint = async (req, res) => {
       res.status(404).send({ message: "TransactionPoint not found" });
       return;
     }
-    await transactionPointService.deleteTransactionPoint(transactionId, (err, result) => {
-      if (err) {
-        next(err);
-      } else {
-        res.send({ message: "Delete Success!" });
+    await transactionPointService.deleteTransactionPoint(
+      transactionId,
+      (err, result) => {
+        if (err) {
+          next(err);
+        } else {
+          res.send({ message: "Delete Success!" });
+        }
       }
-    });
+    );
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

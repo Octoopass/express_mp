@@ -1,18 +1,13 @@
 const connection = require("../databases/mysql");
 
-var Order = function (order = {}) {
+var TransactionOrder = function (order = {}) {
   this.orderID = order.orderId;
-  this.senderName = order.senderName;
-  this.receiverName = order.receiverName;
-  this.senderAddress = order.senderAddress;
-  this.receiverAddress = order.receiverAddress;
-  this.receiverPhoneNumber = order.receiverPhoneNumber;
   this.type = order.type;
   this.weight = order.weight;
 };
 
-const orderService = {
-  getOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
+const transactionOrderService = {
+  gettransactionOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
@@ -33,7 +28,7 @@ const orderService = {
         }
       );
     }),
-  getSingleOrder: (id) =>
+  getSingleTransactionOrder: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
@@ -48,22 +43,22 @@ const orderService = {
         }
       );
     }),
-  createOrder: (newOrder, callback) => {
-    connection.query(`INSERT INTO orders set ?`, newOrder, callback);
+  createTransactionOrder: (newtransactionOrder, callback) => {
+    connection.query(`INSERT INTO orders set ?`, newtransactionOrder, callback);
   },
-  updateOrder: (id, updateOrder, callback) => {
+  updateTransactionOrder: (id, updatetransactionOrder, callback) => {
     connection.query(
       `UPDATE orders set ? WHERE orderID = ${id}`,
-      updateOrder,
+      updatetransactionOrder,
       callback
     );
   },
-  deleteOrder: (id, callback) => {
+  deleteTransactionOrder: (id, callback) => {
     connection.query(`DELETE FROM orders WHERE orderID = ${id}`, callback);
   },
 };
 
 module.exports = {
-  Order,
-  orderService,
+  TransactionOrder,
+  transactionOrderService,
 };
