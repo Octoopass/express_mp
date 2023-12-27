@@ -72,7 +72,7 @@ const getAccounts = async (req, res, next) => {
       }
     });
   } catch (error) {
-    throw new Error("Hello error!");
+    throw new Error("error!");
   }
 };
 
@@ -88,7 +88,7 @@ const getAccountDetail = async (req, res) => {
         throw Error;
       });
   } catch (error) {
-    res.status(403).send({ message: "For hidden" });
+    res.status(403).send({ message: "Forbidden!" });
   }
 };
 
@@ -103,7 +103,7 @@ const logout = async (req, res) => {
       res.json({ message: "Logged out successfully" });
     });
   } catch (error) {
-    res.status(403).send({ message: "For hidden" });
+    res.status(403).send({ message: "Forbidden!" });
   }
 };
 
@@ -191,7 +191,7 @@ const deleteAccount = async (req, res, next) => {
     if (err) {
       next(err);
     } else {
-      res.send({ msg: "Delete succesful" });
+      res.send({ msg: "Delete Success!" });
     }
   });
 };

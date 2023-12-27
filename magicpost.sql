@@ -42,7 +42,7 @@ CREATE TABLE `account`(
 
 -- hub/transactionID in all Order -> unsigned fk to account (not yet implemented)
 -- create table Order: order created for customer
-CREATE TABLE `order`(
+CREATE TABLE `orders`(
     orderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     transactionID TINYINT UNSIGNED NOT NULL,
     senderName VARCHAR(50) NOT NULL,
@@ -71,7 +71,7 @@ CREATE TABLE `transactionOrder`(
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
     tShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
-    FOREIGN KEY (orderID) REFERENCES `order`(orderID)
+    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table shippingOrder: order gui den nguoi nhan
@@ -84,7 +84,7 @@ CREATE TABLE `shippingOrder`(
     receiveDate DATE,
     shipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
     FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
-    FOREIGN KEY (orderID) REFERENCES `order`(orderID)
+    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table hubOrder: ship order from hub to endpoint's hub/corresponding transaction if same endpoint (somehow)

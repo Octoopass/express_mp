@@ -16,9 +16,9 @@ const orderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT *, branchName FROM Orders O
-          left join Shipping_Branch B on B.branchId = O.branchId
-          left join Hub H on H.hubId = B.hubId
+          SELECT *, T.transactionName FROM Orders O
+          left join transactionpoint T on T.transactionID = O.transactionID
+          left join Hub H on H.hubID = O.hubID
           group by O.orderID
           ${branchId ? `having O.branchId=${branchId}` : ""}
           ${hubId ? `having B.hubId=${hubId}` : ""} 

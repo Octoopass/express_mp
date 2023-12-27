@@ -22,7 +22,7 @@ const createHub = async (req, res, next) => {
         next(err);
       } else {
       }
-      res.send({ message: "Successful" });
+      res.send({ message: "Success!" });
     });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -43,7 +43,7 @@ const updateHub = async (req, res, next) => {
       if (err) {
         next(err);
       } else {
-        res.send({ message: "Edit succesfull" });
+        res.send({ message: "Edit Success!" });
       }
     });
   } catch (err) {
@@ -64,7 +64,7 @@ const deleteHub = async (req, res, next) => {
       if (err) {
         next(err);
       } else {
-        res.send({ message: "Delete successful" });
+        res.send({ message: "Delete Success!" });
       }
     });
   } catch (err) {

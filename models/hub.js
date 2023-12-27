@@ -13,7 +13,7 @@ var Hub = function (data = {}) {
 const hubService = {
     getHubs: () =>
       new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM Hub`, (error, results) => {
+        connection.query(`SELECT * FROM hub`, (error, results) => {
           if (error) {
             return reject(error);
           }
@@ -22,21 +22,21 @@ const hubService = {
       }),
     createHub: (newHub, callback) => {
       connection.query(
-        `INSERT INTO Hub set ?`,
+        `INSERT INTO hub set ?`,
         newHub,
         callback
       );
     },
     updateHub: (id, updateHub, callback) => {
       connection.query(
-        `UPDATE Hub set ? WHERE hubId = ${id}`,
+        `UPDATE hub set ? WHERE hubID = ${id}`,
         updateHub,
         callback
       );
     },
     deleteHub: (id, callback) => {
       connection.query(
-        `DELETE FROM Hub WHERE hubId = ${id}`,
+        `DELETE FROM hub WHERE hubID = ${id}`,
         callback
       );
     },
@@ -44,7 +44,7 @@ const hubService = {
       new Promise((resolve, reject) => {
         connection.query(
           `
-          SELECT EXISTS(select * from Hub
+          SELECT EXISTS(select * from hub
           where hubId = '${id}') as isExisted
           `,
           (error, results) => {
