@@ -15,6 +15,7 @@ const accountRoute = require("./routes/accountRoutes");
 const shippingOrderRoute = require("./routes/shippingOrderRoutes");
 const transactionPointRoute = require("./routes/transactionPointRoutes");
 const hubRoute = require("./routes/hubRoutes");
+const orderRoute = require("./routes/orderRoutes");
 
 // var path = require("path");
 
@@ -56,6 +57,7 @@ app.use("/accounts", accountRoute);
 app.use("/shipping-orders", shippingOrderRoute);
 app.use("/transactionPoint", transactionPointRoute);
 app.use("/hub", hubRoute);
+app.use("/orders", orderRoute);
 
 // error (not yet)
 app.use((err, req, res, next) => {
