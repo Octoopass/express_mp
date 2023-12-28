@@ -31,9 +31,6 @@ CREATE TABLE `account`(
     Position ENUM('Dev', 'headAdmin', 'hubAdmin', 'transactionAdmin', 'hubEmployee', 'transactionEmployee') NOT NULL UNIQUE KEY,
     CreateDate DATETIME DEFAULT NOW(),
     password VARCHAR(800),
-    status TINYINT DEFAULT 0,
-    -- 0: Not Active, 1: Active
-    PathImage VARCHAR(50),
     transactionID TINYINT UNSIGNED,
     hubID TINYINT UNSIGNED,
     FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID),
@@ -55,10 +52,9 @@ CREATE TABLE `orders`(
     createTime DATETIME DEFAULT NOW(),
     expectedSendDate DATE,
     receiveDate DATE,
-    shipStatus ENUM('Pending', 'Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
+    shipStatus ENUM('Pending', 'Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Pending',
     shippingFee VARCHAR(50),
     packageWeight VARCHAR(50),
-    employeeSignature VARCHAR(50), 
     FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -70,7 +66,7 @@ CREATE TABLE `transactionOrder`(
     tShippingEmployeeName VARCHAR(50) NOT NULL, 
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
-    tShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
+    tShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Ongoing',
     FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -83,7 +79,7 @@ CREATE TABLE `shippingOrder`(
     shippingEmployeeName VARCHAR(50) NOT NULL,
     sendDate DATE NOT NULL,
     receiveDate DATE,
-    shipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
+    shipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Ongoing',
     FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
