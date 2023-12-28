@@ -4,8 +4,6 @@ CREATE DATABASE IF NOT EXISTS `magicpost` DEFAULT CHARACTER SET utf8mb4 COLLATE 
 USE `magicpost`;
 -- -----------------------------------------------------------------------------------------------------------
 
-
-
 CREATE TABLE `hub`(
     hubID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     hubName VARCHAR(50) NOT NULL,
@@ -21,6 +19,11 @@ CREATE TABLE `transactionPoint`(
     FOREIGN KEY(hubID) REFERENCES hub(hubID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
+CREATE TABLE `position` (
+    positionID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    positionName ENUM('Dev', 'headAdmin', 'hubAdmin', 'transactionAdmin', 'hubEmployee', 'transactionEmployee') NOT NULL UNIQUE KEY
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
 
 -- create table account
 CREATE TABLE `account`(
@@ -28,11 +31,12 @@ CREATE TABLE `account`(
     Email VARCHAR(50) NOT NULL UNIQUE KEY,
     Username VARCHAR(50) NOT NULL UNIQUE,
     FullName VARCHAR(50) NOT NULL,
-    Position ENUM('Dev', 'headAdmin', 'hubAdmin', 'transactionAdmin', 'hubEmployee', 'transactionEmployee') NOT NULL UNIQUE KEY,
+    PositionID TINYINT UNSIGNED,
     CreateDate DATETIME DEFAULT NOW(),
     password VARCHAR(800),
     transactionID TINYINT UNSIGNED,
     hubID TINYINT UNSIGNED,
+    FOREIGN KEY(PositionID) REFERENCES `position`(positionID),
     FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY(hubID) REFERENCES hub(hubID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -52,7 +56,7 @@ CREATE TABLE `orders`(
     createTime DATETIME DEFAULT NOW(),
     expectedSendDate DATE,
     receiveDate DATE,
-    shipStatus ENUM('Pending', 'Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Pending',
+    shipStatus VARCHAR(10) DEFAULT 'Pending',
     shippingFee VARCHAR(50),
     packageWeight VARCHAR(50),
     FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID)
@@ -66,7 +70,7 @@ CREATE TABLE `transactionOrder`(
     tShippingEmployeeName VARCHAR(50) NOT NULL, 
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
-    tShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Ongoing',
+    tShipStatus VARCHAR(10) DEFAULT 'Pending',
     FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -79,7 +83,7 @@ CREATE TABLE `shippingOrder`(
     shippingEmployeeName VARCHAR(50) NOT NULL,
     sendDate DATE NOT NULL,
     receiveDate DATE,
-    shipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY DEFAULT 'Ongoing',
+    shipStatus VARCHAR(10) DEFAULT 'Pending',
     FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -93,7 +97,7 @@ CREATE TABLE `shippingOrder`(
 --     hShippingEmployeeName VARCHAR(50) NOT NULL,
 --     hSendDate DATE NOT NULL,
 --     hReceiveDate DATE,
---     hShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
+--     hShipStatus VARCHAR(10),
 --     FOREIGN KEY (orderID) REFERENCES transactionOrder(orderID),
 --     FOREIGN KEY (hubID) REFERENCES transactionOrder(hubID)
 --     -- FOREIGN KEY (endpointID) REFERENCES ...
