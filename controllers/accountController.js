@@ -55,9 +55,10 @@ const login = async (req, res, next) => {
 
 const getAccounts = async (req, res, next) => {
   let { page, limit, search } = req.query;
+  let { hubID, transactionID } = req.body;
 
   try {
-    accountService.getAccounts({ page, limit, search }, async (err, result) => {
+    accountService.getAccounts({ page, limit, search }, { hubID, transactionID }, async (err, result) => {
       if (err) {
         next(err);
       } else {

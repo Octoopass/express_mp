@@ -37,7 +37,7 @@ const accountService = {
         }
       );
     }),
-  getAccounts: ({ page = 1, limit = 10, search = "" }, callback) => {
+  getAccounts: ({ page = 1, limit = 10, search = "" }, { hubID = undefined, transactionID = undefined }, callback) => {
     connection.query(
       `
       select 
@@ -50,6 +50,8 @@ const accountService = {
       left join hub as H on H.hubID = A.hubID
       left join position as P on P.positionID = A.PositionID
       where concat(FullName, Email, Username) LIKE '%${search}%'
+      ${transactionId ? `having transactionID=${transactionId}` : ""}
+      ${hubId ? `having H.hubID=${hubId}` : ""}
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
       `,
       callback
