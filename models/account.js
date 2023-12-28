@@ -21,7 +21,7 @@ const accountService = {
     connection.query(
       "SELECT * FROM account WHERE Username = ?",
       [data?.username, data?.password],
-      
+
       callback
     );
   },
@@ -91,7 +91,7 @@ const accountService = {
         `,
         (error, results) => {
           if (error) return reject(error);
-          return resolve(results)
+          return resolve(results);
         }
       );
     }),

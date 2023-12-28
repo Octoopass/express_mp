@@ -14,9 +14,13 @@ const getOrders = async (req, res) => {
 
 const getSingleOrder = async (req, res) => {
   const orderId = req.params.id;
-  const order = await orderService.getSingleOrder({
-    orderId,
-  });
+  let isExisted = await orderService.checkOrderIdExists(orderId);
+
+  if (!isExisted) {
+    res.status(404).send({ message: "Order not found" });
+    return;
+  }
+  const order = await orderService.getSingleOrder(orderId);
 
   res.send({
     data: order,

@@ -3,6 +3,8 @@ const {
   shippingOrderService,
 } = require("../models/shippingOrder");
 
+const { orderService } = require("../models/order");
+
 const getShippingOrders = async (req, res) => {
   let { transactionId, hubId } = req.query;
   const shippingOrders = await shippingOrderService.getShippingOrders({
@@ -18,6 +20,12 @@ const getShippingOrders = async (req, res) => {
 // get shippingOrder detail BY orderID
 const getSingleShippingOrder = async (req, res) => {
   const id = req.params.id;
+  let isExisted = await orderService.checkOrderIdExists(id);
+
+  if (!isExisted) {
+    res.status(404).send({ message: "Order not found" });
+    return;
+  }
   const shippingOrder = await shippingOrderService.getSingleShippingOrder({
     id,
   });
@@ -53,12 +61,10 @@ const createShippingOrder = async (req, res, next) => {
 const updateShippingOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
-    let isExisted = await shippingOrderService.checkShippingOrderIdExists(
-      categoryId
-    );
+    let isExisted = await orderService.checkOrderIdExists(categoryId);
 
     if (!isExisted) {
-      res.status(404).send({ message: "ShippingOrder not found" });
+      res.status(404).send({ message: "Order not found" });
       return;
     }
     const updateShippingOrder = new ShippingOrder(req.body);
@@ -69,7 +75,7 @@ const updateShippingOrder = async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.send({ message: "Edit product detail" });
+          res.send({ message: "Edit order detail" });
         }
       }
     );
@@ -79,11 +85,9 @@ const updateShippingOrder = async (req, res, next) => {
 const deleteShippingOrder = async (req, res) => {
   try {
     const categoryId = req.params.id;
-    let isExisted = await shippingOrderService.checkShippingOrderIdExists(
-      categoryId
-    );
+    let isExisted = await orderService.checkOrderIdExists(categoryId);
     if (!isExisted) {
-      res.status(404).send({ message: "ShippingOrder not found" });
+      res.status(404).send({ message: "Order not found" });
       return;
     }
     await shippingOrderService.deleteShippingOrder(

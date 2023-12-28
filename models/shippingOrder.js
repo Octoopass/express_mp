@@ -7,7 +7,12 @@ var ShippingOrder = function (shippingOrder = {}) {
 
 // order: final transactionPoint -> receiver
 const shippingOrderService = {
-  getShippingOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
+  getShippingOrders: ({
+    transactionId = undefined,
+    hubId = undefined,
+    page = 1,
+    limit = 10,
+  }) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
@@ -53,29 +58,32 @@ const shippingOrderService = {
   },
   updateShippingOrder: (id, updateProductCategory, callback) => {
     connection.query(
-      `UPDATE shippingOrder set ? WHERE sOrderID = ${id}`,
+      `UPDATE shippingOrder set ? WHERE orderID = ${id}`,
       updateProductCategory,
       callback
     );
   },
   deleteShippingOrder: (id, callback) => {
-    connection.query(`DELETE FROM shippingOrder WHERE sOrderID = ${id}`, callback);
+    connection.query(
+      `DELETE FROM shippingOrder WHERE orderID = ${id}`,
+      callback
+    );
   },
-  checkShippingOrderIdExists: (id) =>
-    new Promise((resolve, reject) => {
-      connection.query(
-        `
-      SELECT EXISTS(select * from shippingOrder
-      where sOrderID = '${id}') as isExisted
-    `,
-        (error, results) => {
-          if (error) {
-            return reject(error);
-          }
-          return resolve(Boolean(results[0]?.isExisted));
-        }
-      );
-    }),
+  // checkShippingOrderIdExists: (id) =>
+  //   new Promise((resolve, reject) => {
+  //     connection.query(
+  //       `
+  //     SELECT EXISTS(select * from shippingOrder
+  //     where sOrderID = '${id}') as isExisted
+  //   `,
+  //       (error, results) => {
+  //         if (error) {
+  //           return reject(error);
+  //         }
+  //         return resolve(Boolean(results[0]?.isExisted));
+  //       }
+  //     );
+  //   }),
 };
 
 module.exports = {

@@ -15,7 +15,12 @@ var Order = function (order = {}) {
 
 // order service
 const orderService = {
-  getOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
+  getOrders: ({
+    transactionId = undefined,
+    hubId = undefined,
+    page = 1,
+    limit = 10,
+  }) =>
     new Promise((resolve, reject) => {
       connection.query(
         `

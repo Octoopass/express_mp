@@ -14,10 +14,10 @@ const {
   deleteOrder,
 } = require("../controllers/orderController");
 
-router.get("/", getOrders);
-router.post("/", createOrder);
-router.put("/:id", updateOrder);
-router.delete("/:id", deleteOrder);
+router.get("/", getOrders); // http://localhost:8080/orders
+router.post("/", createOrder); // http://localhost:8080/orders
+router.put("/:id", updateOrder); // http://localhost:8080/orders/id
+router.delete("/:id", deleteOrder); // http://localhost:8080/orders/id
 
 router.get("/:id", getSingleOrder)
 
