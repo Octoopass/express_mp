@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-    authorization,
-    checkRole,
-} = require("../middleware/auth");
+  authorization,
+  authorizePermissions,
+} = require("../middleware/auth")
 
 const {
   getHubs,

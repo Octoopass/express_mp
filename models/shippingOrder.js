@@ -7,12 +7,7 @@ var ShippingOrder = function (shippingOrder = {}) {
 
 // order: final transactionPoint -> receiver
 const shippingOrderService = {
-  getShippingOrders: ({
-    transactionId = undefined,
-    hubId = undefined,
-    page = 1,
-    limit = 10,
-  }) =>
+  getShippingOrders: ({page = 1, limit = 10}, {transactionId = undefined, hubId = undefined}) =>
     new Promise((resolve, reject) => {
       connection.query(
         `

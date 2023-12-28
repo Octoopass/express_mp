@@ -3,8 +3,8 @@ const router = express.Router();
 
 const {
     authorization,
-    checkRole,
-} = require("../middleware/auth");
+    authorizePermissions,
+} = require("../middleware/auth")
 
 const {
     getTransactionPoints,

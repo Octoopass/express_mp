@@ -78,13 +78,13 @@ CREATE TABLE `transactionOrder`(
 -- Create table shippingOrder: order gui den nguoi nhan
 CREATE TABLE `shippingOrder`(
     sOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    transactionID TINYINT UNSIGNED NOT NULL,
+    endpointID TINYINT UNSIGNED NOT NULL,
     orderID TINYINT UNSIGNED NOT NULL,
     shippingEmployeeName VARCHAR(50) NOT NULL,
     sendDate DATE NOT NULL,
     receiveDate DATE,
     shipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -135,9 +135,36 @@ INSERT INTO `account` (`accountID`, `Email`, `Username`, `FullName`, `PositionID
 (1, 'khan@gmail.com', 'khan', 'Luong Sy Khanh', 1, '2023-12-28 14:58:10', '$2a$10$un4w5YCblVwwEAC6kf42.emBn/kzXg11SVZGDbciK7CeHdtc2L.YC', NULL, NULL);
 
 INSERT INTO `orders` (`orderID`, `transactionID`, `senderName`, `senderAddress`, `senderPhoneNumber`, `packageType`, `receiverName`, `receiverAddress`, `reveiverPhoneNumber`, `createTime`, `expectedSendDate`, `receiveDate`, `shipStatus`, `shippingFee`, `packageWeight`) VALUES
-(1, 1, 'Khan', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Document', 'Phuong', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:35:18', '2023-12-29', NULL, 'Pending', '10000', '1000g'),
-(2, 1, 'Khanh', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Commodity', 'Minh', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:37:50', '2023-12-29', NULL, 'Pending', '20000', '10000g'),
-(3, 1, 'Minh', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:42:49', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
-(4, 1, 'Duy', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Tuan', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:43:06', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
-(5, 3, 'Dat', 'Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:12', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
-(6, 3, 'Dat', 'Ha Tinh', '09xx', 'Commodity', 'Vy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:34', '2023-12-29', NULL, 'Pending', '20000', '5000g');
+(1, 2, 'Khan', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Document', 'Phuong', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:35:18', '2023-12-30', NULL, 'Pending', '10000', '1000g'),
+(2, 2, 'Khanh', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Commodity', 'Minh', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:37:50', '2023-12-30', NULL, 'Pending', '20000', '10000g'),
+(3, 2, 'Minh', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:42:49', '2023-12-30', NULL, 'Pending', '20000', '5000g'),
+(4, 2, 'Duy', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Tuan', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:43:06', '2023-12-30', NULL, 'Pending', '20000', '5000g'),
+(5, 1, 'Dat', 'Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:12', '2023-12-30', NULL, 'Pending', '20000', '5000g'),
+(6, 3, 'Dat', 'Ha Tinh', '09xx', 'Commodity', 'Vy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:34', '2024-01-01', NULL, 'Pending', '20000', '5000g');
+
+INSERT INTO `transactionOrder` (`transactionID`, `orderID`, `tShippingEmployeeName`, `tSendDate`, `tReceiveDate`, `tShipStatus`)
+VALUES
+(2, 1, 'Transactionemployee 1', '2023-12-28 23:00:00', '2023-12-28 20:35:18', 'Pending'),
+(2, 2, 'Transactionemployee 2', '2023-12-28 23:00:00','2023-12-28 20:37:50', 'Pending'),
+(2, 3, 'Transactionemployee 3', '2023-12-28 23:00:00', '2023-12-28 20:42:49', 'Pending'),
+(2, 4, 'Transactionemployee 4', '2023-12-28 23:00:00', '2023-12-28 20:43:06', 'Pending'),
+(1, 5, 'Transactionemployee 5', '2023-12-28 23:00:00', '2023-12-28 20:48:12', 'Pending'),
+(3, 6, 'Transactionemployee 6', '2023-12-28 23:00:00','2023-12-28 20:48:34', 'Pending');
+
+INSERT INTO `shippingOrder` (`endpointID`, `orderID`, `shippingEmployeeName`, `sendDate`, `receiveDate`, `shipStatus`)
+VALUES
+(2, 1, 'Transactionemployee 7', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
+(2, 2, 'Transactionemployee 8', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
+(2, 3, 'Transactionemployee 9', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
+(2, 4, 'Transactionemployee 10', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
+(1, 5, 'Transactionemployee 11', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
+(3, 6, 'Transactionemployee 12', '2023-01-01 10:00:00','2023-01-01', 'Pending');
+
+INSERT INTO `hubOrder` (`orderID`, `hubID`, `endpointID`, `hShippingEmployeeName`, `hSendDate`, `hReceiveDate`, `hShipStatus`)
+VALUES
+(1, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(2, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(3, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(4, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(5, 3, 5, 'Hubemployee 3', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(6, 3, 6, 'Hubemployee 3', '2023-12-31 9:00:00', '2023-12-30 18:00:00', 'Pending');

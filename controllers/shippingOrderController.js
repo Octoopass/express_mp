@@ -37,11 +37,17 @@ const getSingleShippingOrder = async (req, res) => {
 
 const createShippingOrder = async (req, res, next) => {
   try {
-    const { transactionID, orderID, shippingEmployeeName, sendDate } = req.body;
-    if (!(transactionID && orderID && shippingEmployeeName && sendDate)) {
+    const { endpointID, orderID, shippingEmployeeName, sendDate } = req.body;
+    if (!(endpointID && orderID && shippingEmployeeName && sendDate)) {
       res.status(400).json({
         message: "Not enough required informations",
       });
+      return;
+    }
+    let isExisted = await orderService.checkOrderIdExists(orderID);
+
+    if (isExisted) {
+      res.status(403).send({ message: "ShippingOrder for orderID already existed" });
       return;
     }
     // const order = new ShippingOrder(req.body);

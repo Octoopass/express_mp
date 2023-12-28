@@ -7,12 +7,7 @@ var TransactionOrder = function (transactionOrder = {}) {
 
 // order: transactionPoint -> hub
 const transactionOrderService = {
-  getTransactionOrders: ({
-    transactionId = undefined,
-    hubId = undefined,
-    page = 1,
-    limit = 10,
-  }) =>
+  getTransactionOrders: ({page = 1, limit = 10}, {transactionId = undefined, hubId = undefined}) =>
     new Promise((resolve, reject) => {
       connection.query(
         `

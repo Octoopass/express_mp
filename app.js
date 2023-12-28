@@ -12,14 +12,15 @@ const morgan = require("morgan");
 
 // routers
 const accountRoute = require("./routes/accountRoutes");
-const shippingOrderRoute = require("./routes/shippingOrderRoutes");
 const transactionPointRoute = require("./routes/transactionPointRoutes");
 const hubRoute = require("./routes/hubRoutes");
 const orderRoute = require("./routes/orderRoutes");
+const shippingOrderRoute = require("./routes/shippingOrderRoutes");
+const transactionOrderRoute = require("./routes/transactionOrderRoutes")
 
 // var path = require("path");
 
-const { CORS_URLS } = require("./constants/config");
+const { CORS_URLS } = require("../constants/config");
 
 // app.set("views", path.join(__dirname, "/views"));
 // app.set("view engine", "ejs");
@@ -54,10 +55,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/accounts", accountRoute);
-app.use("/shipping-orders", shippingOrderRoute);
 app.use("/transactionPoint", transactionPointRoute);
 app.use("/hub", hubRoute);
 app.use("/orders", orderRoute);
+app.use("/shippingOrders", shippingOrderRoute);
+app.use("/transactionOrders", transactionOrderRoute);
 
 // error (not yet)
 app.use((err, req, res, next) => {
