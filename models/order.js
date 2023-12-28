@@ -15,12 +15,7 @@ var Order = function (order = {}) {
 
 // order service
 const orderService = {
-  getOrders: ({
-    transactionId = undefined,
-    hubId = undefined,
-    page = 1,
-    limit = 10,
-  }) =>
+  getOrders: ({page = 1, limit = 10}, {transactionId = undefined, hubId = undefined}) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
@@ -29,7 +24,7 @@ const orderService = {
           left join transactionpoint T on T.transactionID = O.transactionID
           left join hub H on H.hubID = T.hubID
           group by O.orderID  
-          ${transactionId ? `having T.transactionID=${transactionId}` : ""}
+          ${transactionId ? `having transactionID=${transactionId}` : ""}
           ${hubId ? `having H.hubID=${hubId}` : ""}
           ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""}  
         `,

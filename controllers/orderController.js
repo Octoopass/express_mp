@@ -1,12 +1,10 @@
 const { Order, orderService } = require("../models/order");
 
 const getOrders = async (req, res) => {
-  let { transactionId, hubId } = req.query;
-  const orders = await orderService.getOrders({
-    transactionId,
-    hubId,
-  });
-
+  let { page, limit } = req.query;
+  let { transactionId, hubId } = req.body;
+  const orders = await orderService.getOrders({page, limit}, {transactionId, hubId});
+  
   res.send({
     data: orders,
   });
@@ -85,12 +83,13 @@ const updateOrder = async (req, res, next) => {
       res.status(404).send({ message: "Order not found" });
       return;
     }
-    const updateOrder = new Order(req.body);
-    orderService.updateOrder(orderId, updateOrder, (err, result) => {
+    const { shipStatus } = req.body;
+    // const updateOrder = new Order(req.body);
+    orderService.updateOrder(orderId, req.body, (err, result) => {
       if (err) {
         next(err);
       } else {
-        res.send({ message: "Edit order detail" });
+        res.send({ message: "Editted" });
       }
     });
   } catch (error) {}

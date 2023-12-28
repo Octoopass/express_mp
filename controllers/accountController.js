@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
                 if (err) {
                   console.error(err);
                 } else {
-                  res.send({ data: result });
+                  res.send({ msg: "Success!" });
                 }
               })
               .catch((err) => {
@@ -41,7 +41,7 @@ const login = async (req, res, next) => {
           } else {
             res
               .status(400)
-              .send({ msg: "Incorrect Username and/or Password!" });
+              .send({ msg: "Incorrect Username or Password!" });
           }
         });
       } else {
