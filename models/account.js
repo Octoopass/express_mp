@@ -23,11 +23,12 @@ const accountService = {
       callback
     );
   },
-  getTotalAccount: (search = "") =>
+  getTotalAccount: ({ hubID = undefined, transactionID = undefined }) =>
     new Promise((resolve, reject) => {
       connection.query(
-        `SELECT COUNT(AccountID) as total FROM account        
-        where concat(FullName, Email, Username) LIKE '%${search}%'
+        `SELECT COUNT(AccountID) as total FROM account
+        ${transactionID ? `where transactionID=${transactionID}` : ""}
+        ${hubID ? `where hubID=${hubID}` : ""}
         `,
         (error, results) => {
           if (error) {
@@ -37,7 +38,7 @@ const accountService = {
         }
       );
     }),
-  getAccounts: ({ page = 1, limit = 10, search = "" }, { hubID = undefined, transactionID = undefined }, callback) => {
+  getAccounts: ({ page = 1, limit = 10 }, { hubID = undefined, transactionID = undefined }, callback) => {
     connection.query(
       `
       select 
@@ -49,9 +50,8 @@ const accountService = {
       left join transactionpoint as T on T.transactionID = A.transactionID
       left join hub as H on H.hubID = A.hubID
       left join position as P on P.positionID = A.PositionID
-      where concat(FullName, Email, Username) LIKE '%${search}%'
-      ${transactionId ? `having transactionID=${transactionId}` : ""}
-      ${hubId ? `having H.hubID=${hubId}` : ""}
+      ${transactionID ? `having transactionID=${transactionID}` : ""}
+      ${hubID ? `having hubID=${hubID}` : ""}
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
       `,
       callback
