@@ -45,10 +45,11 @@ const accountService = {
         AccountID, Email, Username, FullName, 
         A.transactionID as transactionID, T.transactionName as transactionName, 
         A.hubID as hubID, H.hubName as hubName,
-        Position, CreateDate
+        positionName, CreateDate
       from account as A  
       left join transactionpoint as T on T.transactionID = A.transactionID
       left join hub as H on H.hubID = A.hubID
+      left join position as P on P.positionID = A.PositionID
       where concat(FullName, Email, Username) LIKE '%${search}%'
       ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
       `,
