@@ -1,24 +1,23 @@
 const connection = require("../databases/mysql");
 
 var ShippingOrder = function (shippingOrder = {}) {
-  let { shippingOrderId, shippingOrderName } = shippingOrder;
-  if (shippingOrderId) {
-    this.CategoryId = shippingOrderId;
-  }
+  let { shippingOrderName } = shippingOrder;
   if (shippingOrderName) {
     this.CategoryName = shippingOrderName;
   }
 };
 
+// order: final transactionPoint -> receiver
 const shippingOrderService = {
-  getShippingOrders: ({ branchId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
+  getShippingOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT *, branchName FROM Shipping_Order O
-          left join Shipping_Branch B on B.branchId = O.branchId 
+          SELECT O.*, transactionName, T.hubID, H.hubName FROM shippingOrder O
+          left join transactionPoint T on T.transactionId = O.transactionId
+          left join hub H on H.hubID = T.hubID 
           group by O.orderID
-          ${branchId ? `having O.branchId=${branchId}` : ""}
+          ${transactionId ? `having O.transactionId=${transactionId}` : ""}
           ${hubId ? `having T.hubID=${hubId}` : ""}
           ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
         `,
@@ -34,11 +33,10 @@ const shippingOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT *, branchName FROM Shipping_Order O
-          left join Shipping_Branch B on B.branchId = O.branchId
-          where shippingOrderId = '${id} '
+          SELECT O.*, transactionName FROM shippingOrder O
+          left join transactionPoint T on T.transactionID = O.transactionID
+          where sOrderID = '${id}'
           group by O.orderID
-          ${branchId ? `having O.branchId=${branchId}` : ""}
         `,
         (error, results) => {
           if (error) {
@@ -50,27 +48,27 @@ const shippingOrderService = {
     }),
   createShippingOrder: (newShippingOrder, callback) => {
     connection.query(
-      `INSERT INTO Shipping_Order set ?`,
+      `INSERT INTO shippingOrder set ?`,
       newShippingOrder,
       callback
     );
   },
-  updateProductCategory: (id, updateProductCategory, callback) => {
+  updateShippingOrder: (id, updateProductCategory, callback) => {
     connection.query(
-      `UPDATE Category set ? WHERE CategoryId = ${id}`,
+      `UPDATE shippingOrder set ? WHERE sOrderID = ${id}`,
       updateProductCategory,
       callback
     );
   },
-  deleteCategory: (id, callback) => {
-    connection.query(`DELETE FROM Category WHERE CategoryId = ${id}`, callback);
+  deleteShippingOrder: (id, callback) => {
+    connection.query(`DELETE FROM shippingOrder WHERE sOrderID = ${id}`, callback);
   },
-  checkCategoryIdExists: (id) =>
+  checkOrderIdExists: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
         `
-      SELECT EXISTS(select * from Category
-      where CategoryId = '${id}') as isExisted
+      SELECT EXISTS(select * from shippingOrder
+      where sOrderID = '${id}') as isExisted
     `,
         (error, results) => {
           if (error) {

@@ -20,7 +20,7 @@ const authorization = (req, res, next) => {
   const token = req.cookies.token;
   console.log("token", token);
   if (!token) return res.sendStatus(403);
-  jwt.verify(token, process.env.APP_SECRET, (err, decoded) => {
+  jwt.verify(token, SESSION_SECRET, (err, decoded) => {
     console.log("verifying");
     if (err) return res.sendStatus(403); //invalid token
 
@@ -49,16 +49,6 @@ const authorization = (req, res, next) => {
 //     return res.status(403).send({ message: "Forbidden" });
 //   }
 // };
-
-const checkRole = (roles) => async (req, res, next) => {
-  let { user_id } = req.body;
-
-  //retrieve user info from DB
-  const Users = await Users.findOne({ user_id });
-  !roles.includes(Users.role)
-      ? res.status(401).json("Sorry you do not have access to this route")
-      : next();
-};
 
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {

@@ -6,6 +6,7 @@ var TransactionOrder = function (order = {}) {
   this.weight = order.weight;
 };
 
+// order: transactionPoint -> hub
 const transactionOrderService = {
   gettransactionOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
     new Promise((resolve, reject) => {
@@ -44,17 +45,17 @@ const transactionOrderService = {
       );
     }),
   createTransactionOrder: (newtransactionOrder, callback) => {
-    connection.query(`INSERT INTO orders set ?`, newtransactionOrder, callback);
+    connection.query(`INSERT INTO transactionOrders set ?`, newtransactionOrder, callback);
   },
   updateTransactionOrder: (id, updatetransactionOrder, callback) => {
     connection.query(
-      `UPDATE orders set ? WHERE orderID = ${id}`,
+      `UPDATE transactionOrder set ? WHERE tOrderID = ${id}`,
       updatetransactionOrder,
       callback
     );
   },
   deleteTransactionOrder: (id, callback) => {
-    connection.query(`DELETE FROM orders WHERE orderID = ${id}`, callback);
+    connection.query(`DELETE FROM transactionOrder WHERE tOrderID = ${id}`, callback);
   },
 };
 

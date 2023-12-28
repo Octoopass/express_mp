@@ -13,6 +13,7 @@ var Order = function (order = {}) {
   this.shipStatus = order.shipStatus;
 };
 
+// order service
 const orderService = {
   getOrders: ({ transactionId = undefined, hubId = undefined, page = 1, limit = 10 }) =>
     new Promise((resolve, reject) => {
