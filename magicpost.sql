@@ -102,3 +102,35 @@ CREATE TABLE `shippingOrder`(
 --     FOREIGN KEY (hubID) REFERENCES transactionOrder(hubID)
 --     -- FOREIGN KEY (endpointID) REFERENCES ...
 -- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+INSERT INTO `hub` (`hubID`, `hubName`, `hubAddress`) VALUES
+(1, 'Điểm tập kết Cầu Giấy', 'Cầu Giấy, Hà Nội'),
+(2, 'Điểm tập kết HT', 'Thành phố Hà Tĩnh, Hà Tĩnh'),
+(3, 'Điểm tập kết MĐ', 'MĐ, Hà Nội');
+
+INSERT INTO `transactionpoint` (`transactionID`, `transactionName`, `transactionAddress`, `hubID`) VALUES
+(1, 'Điểm giao dịch Xuân Thủy', 'Xuân Thủy, Cầu Giấy, Hà Nội', 1),
+(2, 'Điểm giao dịch DVH', 'DVH, Cầu Giấy, Hà Nội', 1),
+(3, 'Điểm giao dịch Thạch Hà', 'Thạch Hà, Hà Tĩnh', 2),
+(4, 'Điểm giao dịch NX', 'NX, Hà Tĩnh', 2),
+(5, 'Điểm giao dịch MD1', 'MD1, MĐ, Hà Nội', 3),
+(6, 'Điểm giao dịch MD2', 'MD2, MĐ, Hà Nội', 3);
+
+INSERT INTO position (positionName)
+VALUES ('Dev'), ('headAdmin'), ('hubAdmin'), ('transactionAdmin'), ('hubEmployee'), ('transactionEmployee');
+
+INSERT INTO `account` (`accountID`, `Email`, `Username`, `FullName`, `PositionID`, `CreateDate`, `password`, `transactionID`, `hubID`) VALUES
+(14, 'giaodich6@gmail.com', 'giaodich6', 'Giao Dich 6', 4, '2023-12-28 15:21:01', '$2a$10$06OaRPu4.HBXA9snrNQ36O/0pMLbaWr.B2X574c7C4GcHR.md2MWa', 6, NULL),
+(13, 'giaodich5@gmail.com', 'giaodich5', 'Giao Dich 5', 4, '2023-12-28 15:20:00', '$2a$10$3B6SWV7q.gTEzxoSMD8k2e04U/vddmW7RU8lr8wNT3AIMWcZLHYrC', 5, NULL),
+(12, 'giaodich4@gmail.com', 'giaodich4', 'Giao Dich 4', 4, '2023-12-28 15:19:45', '$2a$10$xfjsOrAOSbYX1gV4FYgsCec3W94AGJ4EIIXIKOvj.bS3nExO6MpPO', 4, NULL),
+(11, 'giaodich3@gmail.com', 'giaodich3', 'Giao Dich 3', 4, '2023-12-28 15:19:32', '$2a$10$srg7fEXDRjC.yD46QnvPCO8/djBtAWHhqtiV5jaSWiH7UMteUKXtq', 3, NULL),
+(10, 'giaodich2@gmail.com', 'giaodich2', 'Giao Dich 2', 4, '2023-12-28 15:19:13', '$2a$10$cj.x914bUeeaxkKh/O/SCuQuNwTkOWYyuGF0gBvgMam4ETkbAAeYC', 2, NULL),
+(9, 'giaodich1@gmail.com', 'giaodich1', 'Giao Dich 1', 4, '2023-12-28 15:18:58', '$2a$10$AtGKK9w7p1cMvm9FB7ZaQeP4LuKvfao/sI59OHEU4IHhsdQq8rCDi', 1, NULL),
+(8, 'tapket3@gmail.com', 'tapket3', 'Tap Ket Three', 3, '2023-12-28 15:16:55', '$2a$10$.RkorqXNrFjuOLMRPIiUzO35EE1dPHH3wa0RJSxqZaHIxii7CESBK', NULL, 3),
+(7, 'tapket2@gmail.com', 'tapket2', 'Tap Ket Two', 3, '2023-12-28 15:15:54', '$2a$10$u4DFS/1QSuUaQq0.E/JnKeh1UvDFf1JjGYYP3PjIdaCrunEPltoiG', NULL, 2),
+(6, 'tapket1@gmail.com', 'tapket1', 'Tap Ket One', 3, '2023-12-28 15:15:17', '$2a$10$xPmmeXj/yzDPZa06ALOfFOWk3Ud4CBMJTN4tmkXuiXJP/SZjI6JNK', NULL, 1),
+(5, 'admin2@gmail.com', 'admin2', 'Admin Two', 2, '2023-12-28 15:13:45', '$2a$10$ighQrMNEUg8vMzVSGcPl.eQfuAQ3QNjNp5VjIt46tRyvg1EQfcEAq', NULL, NULL),
+(4, 'admin1@gmail.com', 'admin1', 'Admin One', 2, '2023-12-28 15:13:26', '$2a$10$hlt0dfSDu5xjBxlJaTZAn.Vr1M0VLWXlR/9/QqBjWYBP8pxDgVgGi', NULL, NULL),
+(3, 'tuanminh@gmail.com', 'tuanminh', 'Hoang Tuan Minh', 1, '2023-12-28 14:59:02', '$2a$10$w9D3tIlx.nSYlBZmzmPZD.gk8DvBBGgefrg.38rrmcF5RHseROXDe', NULL, NULL),
+(2, 'tuanphuong@gmail.com', 'tuanphuong', 'Nguyen Cong Tuan Phuong', 1, '2023-12-28 14:58:37', '$2a$10$80Bn4vPmxks.Etc3MQu3nOge0RhtCL65MY9Ez731lBw7JAQKpHStS', NULL, NULL),
+(1, 'khan@gmail.com', 'khan', 'Luong Sy Khanh', 1, '2023-12-28 14:58:10', '$2a$10$un4w5YCblVwwEAC6kf42.emBn/kzXg11SVZGDbciK7CeHdtc2L.YC', NULL, NULL);

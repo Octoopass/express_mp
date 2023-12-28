@@ -171,7 +171,6 @@ const updateAccount = async (req, res, next) => {
   accountService.updateAccount(accountId, updateAccount, (err, result) => {
     if (err) {
       next(err);
-      res.status(400).send("Error");
     } else {
       accountService
         .getAccountDetail(accountId)
