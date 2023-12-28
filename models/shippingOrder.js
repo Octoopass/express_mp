@@ -1,10 +1,8 @@
 const connection = require("../databases/mysql");
 
 var ShippingOrder = function (shippingOrder = {}) {
-  let { shippingOrderName } = shippingOrder;
-  if (shippingOrderName) {
-    this.CategoryName = shippingOrderName;
-  }
+  this.shipStatus = shippingOrder.shipStatus;
+  this.receiveDate = shippingOrder.receiveDate;
 };
 
 // order: final transactionPoint -> receiver
@@ -35,7 +33,7 @@ const shippingOrderService = {
         `
           SELECT O.*, transactionName FROM shippingOrder O
           left join transactionPoint T on T.transactionID = O.transactionID
-          where sOrderID = '${id}'
+          where O.orderID = '${id}'
           group by O.orderID
         `,
         (error, results) => {
@@ -63,7 +61,7 @@ const shippingOrderService = {
   deleteShippingOrder: (id, callback) => {
     connection.query(`DELETE FROM shippingOrder WHERE sOrderID = ${id}`, callback);
   },
-  checkOrderIdExists: (id) =>
+  checkShippingOrderIdExists: (id) =>
     new Promise((resolve, reject) => {
       connection.query(
         `

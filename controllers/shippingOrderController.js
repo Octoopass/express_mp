@@ -1,13 +1,13 @@
 const {
-  categoryService,
   ShippingOrder,
   shippingOrderService,
 } = require("../models/shippingOrder");
 
 const getShippingOrders = async (req, res) => {
-  let { branchId } = req.query;
+  let { transactionId, hubId } = req.query;
   const shippingOrders = await shippingOrderService.getShippingOrders({
-    branchId,
+    transactionId,
+    hubId,
   });
 
   res.send({
@@ -15,39 +15,22 @@ const getShippingOrders = async (req, res) => {
   });
 };
 
+// get shippingOrder detail BY orderID
 const getSingleShippingOrder = async (req, res) => {
-  let { id } = req.query;
-  const shippingOrders = await shippingOrderService.getSingleShippingOrder({
+  const id = req.params.id;
+  const shippingOrder = await shippingOrderService.getSingleShippingOrder({
     id,
   });
 
   res.send({
-    data: shippingOrders,
+    data: shippingOrder,
   });
 };
 
 const createShippingOrder = async (req, res, next) => {
   try {
-    const {
-      senderName,
-      senderAddress,
-      senderPhoneNumber,
-      packageType,
-      receiverName,
-      receiverAddress,
-      reveiverPhoneNumber,
-    } = req.body;
-    if (
-      !(
-        senderName &&
-        senderAddress &&
-        senderPhoneNumber &&
-        packageType &&
-        receiverName &&
-        receiverAddress &&
-        reveiverPhoneNumber
-      )
-    ) {
+    const { transactionID, orderID, shippingEmployeeName, sendDate } = req.body;
+    if (!(transactionID && orderID && shippingEmployeeName && sendDate)) {
       res.status(400).json({
         message: "Not enough required informations",
       });
@@ -67,10 +50,10 @@ const createShippingOrder = async (req, res, next) => {
   }
 };
 
-const updateProductShippingOrder = async (req, res, next) => {
+const updateShippingOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
-    let isExisted = await categoryService.checkShippingOrderIdExists(
+    let isExisted = await shippingOrderService.checkShippingOrderIdExists(
       categoryId
     );
 
@@ -78,11 +61,8 @@ const updateProductShippingOrder = async (req, res, next) => {
       res.status(404).send({ message: "ShippingOrder not found" });
       return;
     }
-    const updateShippingOrder = new ShippingOrder({
-      ...req.body,
-      categoryName: req.body?.categoryName,
-    });
-    categoryService.updateProductShippingOrder(
+    const updateShippingOrder = new ShippingOrder(req.body);
+    shippingOrderService.updateProductShippingOrder(
       categoryId,
       updateShippingOrder,
       (err, result) => {
@@ -96,24 +76,26 @@ const updateProductShippingOrder = async (req, res, next) => {
   } catch (error) {}
 };
 
-// Delete a product category by ID
 const deleteShippingOrder = async (req, res) => {
   try {
     const categoryId = req.params.id;
-    let isExisted = await categoryService.checkShippingOrderIdExists(
+    let isExisted = await shippingOrderService.checkShippingOrderIdExists(
       categoryId
     );
     if (!isExisted) {
       res.status(404).send({ message: "ShippingOrder not found" });
       return;
     }
-    await categoryService.deleteShippingOrder(categoryId, (err, result) => {
-      if (err) {
-        next(err);
-      } else {
-        res.send({ msg: "Delete succesful" });
+    await shippingOrderService.deleteShippingOrder(
+      categoryId,
+      (err, result) => {
+        if (err) {
+          next(err);
+        } else {
+          res.send({ msg: "Delete succesful" });
+        }
       }
-    });
+    );
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -123,6 +105,6 @@ module.exports = {
   getShippingOrders,
   getSingleShippingOrder,
   createShippingOrder,
-  updateProductShippingOrder,
+  updateShippingOrder,
   deleteShippingOrder,
 };
