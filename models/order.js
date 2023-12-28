@@ -56,6 +56,18 @@ const orderService = {
         }
       );
     }),
+  getTotalOrder: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(orderID) as total FROM orders`,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(results[0]?.total);
+        }
+      );
+    }),
   createOrder: (newOrder, callback) => {
     connection.query(`INSERT INTO orders set ?`, newOrder, callback);
   },
@@ -69,6 +81,21 @@ const orderService = {
   deleteOrder: (id, callback) => {
     connection.query(`DELETE FROM orders WHERE orderID = ${id}`, callback);
   },
+  checkOrderIdExists: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+      SELECT EXISTS(select * from orders
+      where orderID = '${id}') as isExisted
+      `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
+        }
+      );
+    }),
 };
 
 module.exports = {

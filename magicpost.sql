@@ -49,7 +49,7 @@ CREATE TABLE `orders`(
     senderName VARCHAR(50) NOT NULL,
     senderAddress VARCHAR(255) NOT NULL,
     senderPhoneNumber VARCHAR(20) NOT NULL,
-    packageType ENUM('Document', 'Commodity') NOT NULL,
+    packageType VARCHAR(20) NOT NULL,
     receiverName VARCHAR(50) NOT NULL,
     receiverAddress VARCHAR(255) NOT NULL,
     reveiverPhoneNumber VARCHAR(50) NOT NULL,
@@ -89,19 +89,18 @@ CREATE TABLE `shippingOrder`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table hubOrder: ship order from hub to endpoint's hub/corresponding transaction if same endpoint (somehow)
--- CREATE TABLE IF NOT EXISTS `hubOrder`(
---     hOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
---     orderID TINYINT UNSIGNED NOT NULL,
---     hubID TINYINT UNSIGNED,
---     endpointID TINYINT UNSIGNED,
---     hShippingEmployeeName VARCHAR(50) NOT NULL,
---     hSendDate DATE NOT NULL,
---     hReceiveDate DATE,
---     hShipStatus VARCHAR(10),
---     FOREIGN KEY (orderID) REFERENCES transactionOrder(orderID),
---     FOREIGN KEY (hubID) REFERENCES transactionOrder(hubID)
---     -- FOREIGN KEY (endpointID) REFERENCES ...
--- )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+CREATE TABLE IF NOT EXISTS `hubOrder`(
+    hOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    orderID TINYINT UNSIGNED NOT NULL,
+    hubID TINYINT UNSIGNED NOT NULL,
+    endpointID TINYINT UNSIGNED NOT NULL,
+    hShippingEmployeeName VARCHAR(50) NOT NULL,
+    hSendDate DATE NOT NULL,
+    hReceiveDate DATE,
+    hShipStatus VARCHAR(10) DEFAULT 'Pending',
+    FOREIGN KEY (orderID) REFERENCES orders(orderID),
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `hub` (`hubID`, `hubName`, `hubAddress`) VALUES
 (1, 'Điểm tập kết Cầu Giấy', 'Cầu Giấy, Hà Nội'),
@@ -134,3 +133,11 @@ INSERT INTO `account` (`accountID`, `Email`, `Username`, `FullName`, `PositionID
 (3, 'tuanminh@gmail.com', 'tuanminh', 'Hoang Tuan Minh', 1, '2023-12-28 14:59:02', '$2a$10$w9D3tIlx.nSYlBZmzmPZD.gk8DvBBGgefrg.38rrmcF5RHseROXDe', NULL, NULL),
 (2, 'tuanphuong@gmail.com', 'tuanphuong', 'Nguyen Cong Tuan Phuong', 1, '2023-12-28 14:58:37', '$2a$10$80Bn4vPmxks.Etc3MQu3nOge0RhtCL65MY9Ez731lBw7JAQKpHStS', NULL, NULL),
 (1, 'khan@gmail.com', 'khan', 'Luong Sy Khanh', 1, '2023-12-28 14:58:10', '$2a$10$un4w5YCblVwwEAC6kf42.emBn/kzXg11SVZGDbciK7CeHdtc2L.YC', NULL, NULL);
+
+INSERT INTO `orders` (`orderID`, `transactionID`, `senderName`, `senderAddress`, `senderPhoneNumber`, `packageType`, `receiverName`, `receiverAddress`, `reveiverPhoneNumber`, `createTime`, `expectedSendDate`, `receiveDate`, `shipStatus`, `shippingFee`, `packageWeight`) VALUES
+(1, 1, 'Khan', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Document', 'Phuong', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:35:18', '2023-12-29', NULL, 'Pending', '10000', '1000g'),
+(2, 1, 'Khanh', 'Dvh, Cau Giay, Ha Noi', '7777777777', 'Commodity', 'Minh', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:37:50', '2023-12-29', NULL, 'Pending', '20000', '10000g'),
+(3, 1, 'Minh', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:42:49', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
+(4, 1, 'Duy', 'Dvh, Cau Giay, Ha Noi', '09xx', 'Commodity', 'Tuan', 'Cau Giay, Ha Noi', '0xx', '2023-12-28 20:43:06', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
+(5, 3, 'Dat', 'Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:12', '2023-12-29', NULL, 'Pending', '20000', '5000g'),
+(6, 3, 'Dat', 'Ha Tinh', '09xx', 'Commodity', 'Vy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:34', '2023-12-29', NULL, 'Pending', '20000', '5000g');

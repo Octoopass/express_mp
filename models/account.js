@@ -1,8 +1,6 @@
 const connection = require("../databases/mysql");
 
 var Account = function (account = {}) {
-  this.Email = account.email;
-  this.Username = account.username;
   this.FullName = account.fullName;
   this.PositionID = account.positionId;
   if (account.transactionID) {
@@ -92,6 +90,21 @@ const accountService = {
         (error, results) => {
           if (error) return reject(error);
           return resolve(results);
+        }
+      );
+    }),
+  checkAccountExists: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+          SELECT EXISTS(select * from account
+          where AccountID = '${id}') as isExisted
+          `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
         }
       );
     }),

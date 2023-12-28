@@ -158,6 +158,13 @@ const createAccount = async (req, res, next) => {
 };
 
 const updateAccount = async (req, res, next) => {
+  const accountId = req.params.id;
+  const isExisted = await accountService.checkAccountExists(accountId);
+  
+  if (!isExisted) {
+    res.status(404).send({ message: "Account not found" });
+    return;
+  }
   const { password } = req.body;
   let newPassword;
   if (password) {
@@ -167,7 +174,6 @@ const updateAccount = async (req, res, next) => {
     ...req.body,
     ...(password ? { password: newPassword } : {}),
   });
-  const accountId = req.params.id;
   accountService.updateAccount(accountId, updateAccount, (err, result) => {
     if (err) {
       next(err);
@@ -185,6 +191,12 @@ const updateAccount = async (req, res, next) => {
 };
 
 const deleteAccount = async (req, res, next) => {
+  const isExisted = await accountService.checkAccountExists(req.params.id);
+  
+  if (!isExisted) {
+    res.status(404).send({ message: "Account not found" });
+    return;
+  }
   accountService.deleteAccount(req.params.id, (err, result) => {
     if (err) {
       next(err);

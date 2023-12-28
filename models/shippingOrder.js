@@ -49,6 +49,18 @@ const shippingOrderService = {
         }
       );
     }),
+  getTotalShippingOrder: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(orderID) as total FROM shippingOrder`,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(results[0]?.total);
+        }
+      );
+    }),
   createShippingOrder: (newShippingOrder, callback) => {
     connection.query(
       `INSERT INTO shippingOrder set ?`,

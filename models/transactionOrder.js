@@ -47,6 +47,18 @@ const transactionOrderService = {
         }
       );
     }),
+  getTotalTransactionOrder: () =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT COUNT(orderID) as total FROM transactionOrder`,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(results[0]?.total);
+        }
+      );
+    }),
   createTransactionOrder: (newTransactionOrder, callback) => {
     connection.query(
       `INSERT INTO transactionOrder set ?`,
@@ -67,6 +79,22 @@ const transactionOrderService = {
       callback
     );
   },
+  // check if there is a transactionOrder to corresponding hub for search's orderID
+  checkTransactionOrderIdExists: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+      SELECT EXISTS(select * from transactionOrder
+      where orderID = '${id}') as isExisted
+    `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
+        }
+      );
+    }),
 };
 
 module.exports = {

@@ -39,6 +39,7 @@ const createOrder = async (req, res, next) => {
       reveiverPhoneNumber,
       packageType,
       packageWeight,
+      shippingFee,
       expectedSendDate,
     } = req.body;
     if (
@@ -52,6 +53,7 @@ const createOrder = async (req, res, next) => {
         reveiverPhoneNumber &&
         packageType &&
         packageWeight &&
+        shippingFee &&
         expectedSendDate
       )
     ) {

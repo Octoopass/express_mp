@@ -68,7 +68,7 @@ const updateShippingOrder = async (req, res, next) => {
       return;
     }
     const updateShippingOrder = new ShippingOrder(req.body);
-    shippingOrderService.updateProductShippingOrder(
+    shippingOrderService.updateShippingOrder(
       categoryId,
       updateShippingOrder,
       (err, result) => {
