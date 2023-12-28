@@ -108,7 +108,7 @@ const logout = async (req, res) => {
 };
 
 const createAccount = async (req, res, next) => {
-  const { email, fullName, username, password } = req.body;
+  const { email, fullName, username, password, position, transactionId, hubId } = req.body;
   //handles null error
   if (!(email && fullName && username && password)) {
     res.status(400).send({
@@ -121,8 +121,8 @@ const createAccount = async (req, res, next) => {
     const newPassword = await hashPassword(password);
     var newAccount = new Account({ 
       ...req.body, 
-      // transactionID: tID, 
-      // hubID: hID,
+      transactionID: transactionId, 
+      hubID: hubId,
       password: newPassword 
     });
     

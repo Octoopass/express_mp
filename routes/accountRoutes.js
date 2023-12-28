@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
     authorization,
-    checkRole,
+    authorizePermissions,
 } = require("../middleware/auth");
 
 const {

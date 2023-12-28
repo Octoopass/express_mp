@@ -3,20 +3,20 @@ const router = express.Router();
 
 const {
     authorization,
-    checkRole,
+    authorizePermissions
 } = require("../middleware/auth");
 
 const {
     getShippingOrders,
     createShippingOrder,
-    updateProductShippingOrder,
+    updateShippingOrder,
     deleteShippingOrder,
     getSingleShippingOrder,
 } = require("../controllers/shippingOrderController");
 
 router.get("/", getShippingOrders);
 router.post("/", createShippingOrder);
-router.put("/:id", updateProductShippingOrder);
+router.put("/:id", updateShippingOrder);
 router.delete(":id", deleteShippingOrder);
 
 router.get("/:id", getSingleShippingOrder);

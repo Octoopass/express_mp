@@ -63,6 +63,5 @@ const authorizePermissions = (...roles) => {
 module.exports = {
   hashPassword,
   authorization,
-  checkRole,
   authorizePermissions,
 };
