@@ -1,9 +1,8 @@
 const connection = require("../databases/mysql");
 
-var TransactionOrder = function (order = {}) {
-  this.orderID = order.orderId;
-  this.type = order.type;
-  this.weight = order.weight;
+var TransactionOrder = function (transactionOrder = {}) {
+  this.shipStatus = transactionOrder.shipStatus;
+  this.receiveDate = transactionOrder.receiveDate;
 };
 
 // order: transactionPoint -> hub
@@ -12,14 +11,13 @@ const transactionOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT O.*, T.transactionName, H.hubID, H.hubName
-          FROM orders O
-          left join transactionpoint T on T.transactionID = O.transactionID
-          left join hub H on H.hubID = T.hubID
-          group by O.orderID  
-          ${transactionId ? `having T.transactionID=${transactionId}` : ""}
-          ${hubId ? `having H.hubID=${hubId}` : ""}
-          ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""}  
+        SELECT O.*, transactionName, T.hubID, H.hubName FROM shippingOrder O
+        left join transactionPoint T on T.transactionId = O.transactionId
+        left join hub H on H.hubID = T.hubID 
+        group by O.orderID
+        ${transactionId ? `having O.transactionId=${transactionId}` : ""}
+        ${hubId ? `having T.hubID=${hubId}` : ""}
+        ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
         `,
         (error, results) => {
           if (error) {
@@ -33,8 +31,8 @@ const transactionOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT * FROM orders O
-          where orderID = '${id}'
+          SELECT * FROM transactionOrder O
+          where tOrderID = '${id}'
         `,
         (error, results) => {
           if (error) {
@@ -45,7 +43,7 @@ const transactionOrderService = {
       );
     }),
   createTransactionOrder: (newtransactionOrder, callback) => {
-    connection.query(`INSERT INTO transactionOrders set ?`, newtransactionOrder, callback);
+    connection.query(`INSERT INTO transactionOrder set ?`, newtransactionOrder, callback);
   },
   updateTransactionOrder: (id, updatetransactionOrder, callback) => {
     connection.query(

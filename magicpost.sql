@@ -71,6 +71,7 @@ CREATE TABLE `transactionOrder`(
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
     tShipStatus ENUM('Ongoing', 'Finished', 'Cancelled') NOT NULL UNIQUE KEY,
+    FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
