@@ -4,7 +4,7 @@ var Account = function (account = {}) {
   this.Email = account.email;
   this.Username = account.username;
   this.FullName = account.fullName;
-  this.Position = account.position;
+  this.PositionID = account.positionId;
   if (account.transactionID) {
     this.transactionID = account.transactionID;
   }
@@ -21,6 +21,7 @@ const accountService = {
     connection.query(
       "SELECT * FROM account WHERE Username = ?",
       [data?.username, data?.password],
+      
       callback
     );
   },
@@ -64,10 +65,11 @@ const accountService = {
           AccountID, Email, Username, FullName, 
           A.transactionID as transactionID, T.transactionName as transactionName, 
           A.hubID as hubID, H.hubName as hubName,
-          Position, CreateDate
+          positionName, CreateDate
         from account as A
         left join transactionpoint as T on T.transactionID = A.transactionID
         left join hub as H on H.hubID = A.hubID
+        left join position as P on P.positionID = A.PositionID
         where A.AccountID = '${id}'
         `,
         (error, results) => {
@@ -84,7 +86,7 @@ const accountService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-        SELECT Position FROM account
+        SELECT PositionID FROM account
         WHERE accountID = '${id}'
         `,
         (error, results) => {

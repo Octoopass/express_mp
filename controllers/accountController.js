@@ -108,7 +108,7 @@ const logout = async (req, res) => {
 };
 
 const createAccount = async (req, res, next) => {
-  const { email, fullName, username, position, password, transactionId, hubId } = req.body;
+  const { email, fullName, username, positionId, password, transactionId, hubId } = req.body;
   //handles null error
   if (!(email && fullName && username && password)) {
     res.status(400).send({
@@ -141,7 +141,6 @@ const createAccount = async (req, res, next) => {
     accountService.createAccount(newAccount, (err, result) => {
       if (err) {
         next(err);
-        res.status(400).send("Error");
       } else {
         accountService
           .getAccountDetail(result?.insertId)
