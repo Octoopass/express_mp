@@ -6,11 +6,12 @@ const {
 const { orderService } = require("../models/order");
 
 const getTransactionOrders = async (req, res) => {
-  let { transactionId, hubId } = req.query;
-  const transactionOrders = await transactionOrderService.getTransactionOrders({
-    transactionId,
-    hubId,
-  });
+  let { page, limit } = req.query;
+  let { transactionId, hubId } = req.body;
+  const transactionOrders = await transactionOrderService.getTransactionOrders(
+    { page, limit },
+    { transactionId, hubId }
+  );
 
   res.send({
     data: transactionOrders,
@@ -26,9 +27,10 @@ const getSingleTransactionOrder = async (req, res) => {
     res.status(404).send({ message: "Order not found" });
     return;
   }
-  const transactionOrder = await transactionOrderService.getSingleTransactionOrder({
-    id,
-  });
+  const transactionOrder =
+    await transactionOrderService.getSingleTransactionOrder({
+      id,
+    });
 
   res.send({
     data: transactionOrder,
@@ -37,20 +39,26 @@ const getSingleTransactionOrder = async (req, res) => {
 
 const createTransactionOrder = async (req, res, next) => {
   try {
-    const { transactionID, orderID, shippingEmployeeName, sendDate } = req.body;
-    if (!(transactionID && orderID && shippingEmployeeName && sendDate)) {
+    const { orderID, tShippingEmployeeName, tSendDate } = req.body;
+    if (!(orderID && tShippingEmployeeName && tSendDate)) {
       res.status(400).json({
         message: "Not enough required informations",
       });
       return;
     }
-    let isExisted = await orderService.checkOrderIdExists(orderID);
-
+    // check if already existing orderID in transactionOrder
+    let isExisted = await transactionOrderService.checkTransactionOrderIdExists(orderID); 
     if (isExisted) {
       res
         .status(403)
         .send({ message: "TransactionOrder for orderID already existed" });
       return;
+    }
+    // check if the order exists
+    isExisted = await orderService.checkOrderIdExists(orderID);
+    if (!isExisted) {
+        res.status(404).send({ message: "order doesnt exist" });
+        return;
     }
     // const order = new TransactionOrder(req.body);
     transactionOrderService.createTransactionOrder(req.body, (err, result) => {
@@ -83,7 +91,7 @@ const updateTransactionOrder = async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.send({ message: "Edit order detail" });
+          res.send({ message: "Editted" });
         }
       }
     );

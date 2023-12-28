@@ -65,13 +65,11 @@ CREATE TABLE `orders`(
 -- Create table transactionOrder: ship order from transaction to corresponding hub
 CREATE TABLE `transactionOrder`(
     tOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    transactionID TINYINT UNSIGNED NOT NULL,
     orderID TINYINT UNSIGNED NOT NULL, 
     tShippingEmployeeName VARCHAR(50) NOT NULL, 
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
     tShipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (transactionID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
@@ -92,14 +90,13 @@ CREATE TABLE `shippingOrder`(
 CREATE TABLE IF NOT EXISTS `hubOrder`(
     hOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     orderID TINYINT UNSIGNED NOT NULL,
-    hubID TINYINT UNSIGNED NOT NULL,
     endpointID TINYINT UNSIGNED NOT NULL,
     hShippingEmployeeName VARCHAR(50) NOT NULL,
     hSendDate DATE NOT NULL,
     hReceiveDate DATE,
     hShipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (orderID) REFERENCES orders(orderID),
-    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID)
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
+    FOREIGN KEY (orderID) REFERENCES orders(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `hub` (`hubID`, `hubName`, `hubAddress`) VALUES
@@ -142,14 +139,14 @@ INSERT INTO `orders` (`orderID`, `transactionID`, `senderName`, `senderAddress`,
 (5, 1, 'Dat', 'Cau Giay, Ha Noi', '09xx', 'Commodity', 'Huy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:12', '2023-12-30', NULL, 'Pending', '20000', '5000g'),
 (6, 3, 'Dat', 'Ha Tinh', '09xx', 'Commodity', 'Vy', 'My Dinh, Ha Noi', '0xx', '2023-12-28 20:48:34', '2024-01-01', NULL, 'Pending', '20000', '5000g');
 
-INSERT INTO `transactionOrder` (`transactionID`, `orderID`, `tShippingEmployeeName`, `tSendDate`, `tReceiveDate`, `tShipStatus`)
+INSERT INTO `transactionOrder` (`orderID`, `tShippingEmployeeName`, `tSendDate`, `tReceiveDate`, `tShipStatus`)
 VALUES
-(2, 1, 'Transactionemployee 1', '2023-12-28 23:00:00', '2023-12-28 20:35:18', 'Pending'),
-(2, 2, 'Transactionemployee 2', '2023-12-28 23:00:00','2023-12-28 20:37:50', 'Pending'),
-(2, 3, 'Transactionemployee 3', '2023-12-28 23:00:00', '2023-12-28 20:42:49', 'Pending'),
-(2, 4, 'Transactionemployee 4', '2023-12-28 23:00:00', '2023-12-28 20:43:06', 'Pending'),
-(1, 5, 'Transactionemployee 5', '2023-12-28 23:00:00', '2023-12-28 20:48:12', 'Pending'),
-(3, 6, 'Transactionemployee 6', '2023-12-28 23:00:00','2023-12-28 20:48:34', 'Pending');
+(1, 'Transactionemployee 1', '2023-12-28 23:00:00', '2023-12-28 20:35:18', 'Pending'),
+(2, 'Transactionemployee 2', '2023-12-28 23:00:00','2023-12-28 20:37:50', 'Pending'),
+(3, 'Transactionemployee 3', '2023-12-28 23:00:00', '2023-12-28 20:42:49', 'Pending'),
+(4, 'Transactionemployee 4', '2023-12-28 23:00:00', '2023-12-28 20:43:06', 'Pending'),
+(5, 'Transactionemployee 5', '2023-12-28 23:00:00', '2023-12-28 20:48:12', 'Pending'),
+(6, 'Transactionemployee 6', '2023-12-28 23:00:00','2023-12-28 20:48:34', 'Pending');
 
 INSERT INTO `shippingOrder` (`endpointID`, `orderID`, `shippingEmployeeName`, `sendDate`, `receiveDate`, `shipStatus`)
 VALUES

@@ -11,11 +11,12 @@ const transactionOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-        SELECT O.*, transactionName, T.hubID, H.hubName FROM transactionOrder O
+        SELECT trO.*, O.transactionID, transactionName, T.hubID, H.hubName FROM transactionOrder trO
+        left join orders O on O.orderID = trO.orderID
         left join transactionPoint T on T.transactionId = O.transactionId
         left join hub H on H.hubID = T.hubID 
         group by O.orderID
-        ${transactionId ? `having O.transactionId=${transactionId}` : ""}
+        ${transactionId ? `having O.transactionID=${transactionId}` : ""}
         ${hubId ? `having T.hubID=${hubId}` : ""}
         ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
         `,
