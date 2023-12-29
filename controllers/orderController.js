@@ -1,4 +1,4 @@
-const { Order, orderService } = require("../models/order");
+const { Order, orderService } = require("../services/order");
 
 const getOrders = async (req, res) => {
   let { page, limit } = req.query;

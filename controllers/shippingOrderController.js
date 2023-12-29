@@ -1,9 +1,9 @@
 const {
   ShippingOrder,
   shippingOrderService,
-} = require("../models/shippingOrder");
+} = require("../services/shippingOrder");
 
-const { orderService } = require("../models/order");
+const { orderService } = require("../services/order");
 
 const getShippingOrders = async (req, res) => {
   let { transactionId, hubId } = req.query;

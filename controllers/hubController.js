@@ -1,4 +1,4 @@
-const { Hub, hubService } = require("../models/hub");
+const { Hub, hubService } = require("../services/hub");
 
 const getHubs = async (req, res) => {
   const Hubs = await hubService.getHubs();

@@ -1,9 +1,9 @@
 const {
   transactionOrderService,
   TransactionOrder,
-} = require("../models/transactionOrder");
+} = require("../services/transactionOrder");
 
-const { orderService } = require("../models/order");
+const { orderService } = require("../services/order");
 
 const getTransactionOrders = async (req, res) => {
   let { page, limit } = req.query;
@@ -47,7 +47,9 @@ const createTransactionOrder = async (req, res, next) => {
       return;
     }
     // check if already existing orderID in transactionOrder
-    let isExisted = await transactionOrderService.checkTransactionOrderIdExists(orderID); 
+    let isExisted = await transactionOrderService.checkTransactionOrderIdExists(
+      orderID
+    );
     if (isExisted) {
       res
         .status(403)
@@ -57,8 +59,8 @@ const createTransactionOrder = async (req, res, next) => {
     // check if the order exists
     isExisted = await orderService.checkOrderIdExists(orderID);
     if (!isExisted) {
-        res.status(404).send({ message: "order doesnt exist" });
-        return;
+      res.status(404).send({ message: "order doesnt exist" });
+      return;
     }
     // const order = new TransactionOrder(req.body);
     transactionOrderService.createTransactionOrder(req.body, (err, result) => {
@@ -78,9 +80,17 @@ const updateTransactionOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
     let isExisted = await orderService.checkOrderIdExists(categoryId);
-
     if (!isExisted) {
       res.status(404).send({ message: "Order not found" });
+      return;
+    }
+    isExisted = await transactionOrderService.checkTransactionOrderIdExists(
+      categoryId
+    );
+    if (!isExisted) {
+      res
+        .status(403)
+        .send({ message: "TransactionOrder for orderID doesnt exist" });
       return;
     }
     const updateTransactionOrder = new TransactionOrder(req.body);
@@ -99,11 +109,20 @@ const updateTransactionOrder = async (req, res, next) => {
 };
 
 const deleteTransactionOrder = async (req, res) => {
+  const categoryId = req.params.id;
   try {
-    const categoryId = req.params.id;
     let isExisted = await orderService.checkOrderIdExists(categoryId);
     if (!isExisted) {
       res.status(404).send({ message: "Order not found" });
+      return;
+    }
+    isExisted = await transactionOrderService.checkTransactionOrderIdExists(
+      categoryId
+    );
+    if (!isExisted) {
+      res
+        .status(403)
+        .send({ message: "TransactionOrder for orderID doesnt exist" });
       return;
     }
     await transactionOrderService.deleteTransactionOrder(

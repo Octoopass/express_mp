@@ -10,7 +10,6 @@ CREATE TABLE `hub`(
     hubAddress VARCHAR(255) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
-
 CREATE TABLE `transactionPoint`(
     transactionID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     transactionName VARCHAR(50) NOT NULL,
@@ -23,7 +22,6 @@ CREATE TABLE `position` (
     positionID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     positionName ENUM('Dev', 'headAdmin', 'hubAdmin', 'transactionAdmin', 'hubEmployee', 'transactionEmployee') NOT NULL UNIQUE KEY
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
 
 -- create table account
 CREATE TABLE `account`(
@@ -73,19 +71,6 @@ CREATE TABLE `transactionOrder`(
     FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
--- Create table shippingOrder: order gui den nguoi nhan
-CREATE TABLE `shippingOrder`(
-    sOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    endpointID TINYINT UNSIGNED NOT NULL,
-    orderID TINYINT UNSIGNED NOT NULL,
-    shippingEmployeeName VARCHAR(50) NOT NULL,
-    sendDate DATE NOT NULL,
-    receiveDate DATE,
-    shipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
-    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
 -- Create table hubOrder: ship order from hub to endpoint's hub/corresponding transaction if same endpoint (somehow)
 CREATE TABLE IF NOT EXISTS `hubOrder`(
     hOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -97,6 +82,19 @@ CREATE TABLE IF NOT EXISTS `hubOrder`(
     hShipStatus VARCHAR(10) DEFAULT 'Pending',
     FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
     FOREIGN KEY (orderID) REFERENCES orders(orderID)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- Create table shippingOrder: order to receiver
+CREATE TABLE `shippingOrder`(
+    sOrderID TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    endpointID TINYINT UNSIGNED NOT NULL,
+    orderID TINYINT UNSIGNED NOT NULL,
+    shippingEmployeeName VARCHAR(50) NOT NULL,
+    sendDate DATE NOT NULL,
+    receiveDate DATE,
+    shipStatus VARCHAR(10) DEFAULT 'Pending',
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
+    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `hub` (`hubID`, `hubName`, `hubAddress`) VALUES

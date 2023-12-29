@@ -1,7 +1,7 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { accountService, Account } = require("../models/account");
+const { accountService, Account } = require("../services/account");
 const { hashPassword } = require("../middleware/auth");
 const { SESSION_SECRET } = require("../constants/config");
 

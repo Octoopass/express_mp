@@ -1,9 +1,9 @@
 const {
   TransactionPoint,
   transactionPointService,
-} = require("../models/transactionPoint");
+} = require("../services/transactionPoint");
 
-const { hubService } = require("../models/hub");
+const { hubService } = require("../services/hub");
 
 const getTransactionPoints = async (req, res) => {
   const transactionPoints =
