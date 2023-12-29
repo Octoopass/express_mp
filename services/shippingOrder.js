@@ -76,21 +76,21 @@ const shippingOrderService = {
       callback
     );
   },
-  // checkShippingOrderIdExists: (id) =>
-  //   new Promise((resolve, reject) => {
-  //     connection.query(
-  //       `
-  //     SELECT EXISTS(select * from shippingOrder
-  //     where sOrderID = '${id}') as isExisted
-  //   `,
-  //       (error, results) => {
-  //         if (error) {
-  //           return reject(error);
-  //         }
-  //         return resolve(Boolean(results[0]?.isExisted));
-  //       }
-  //     );
-  //   }),
+  checkShippingOrderIdExists: (id) =>
+    new Promise((resolve, reject) => {
+      connection.query(
+        `
+      SELECT EXISTS(select * from shippingOrder
+      where orderID = '${id}') as isExisted
+    `,
+        (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          return resolve(Boolean(results[0]?.isExisted));
+        }
+      );
+    }),
 };
 
 module.exports = {

@@ -3,7 +3,7 @@ const {
   shippingOrderService,
 } = require("../services/shippingOrder");
 
-const { orderService } = require("../services/order");
+const { hubOrderService } = require("../services/hubOrder");
 
 const getShippingOrders = async (req, res) => {
   let { transactionId, hubId } = req.query;
@@ -20,10 +20,10 @@ const getShippingOrders = async (req, res) => {
 // get shippingOrder detail BY orderID
 const getSingleShippingOrder = async (req, res) => {
   const id = req.params.id;
-  let isExisted = await orderService.checkOrderIdExists(id);
+  let isExisted = await shippingOrderService.checkShippingOrderIdExists(id);
 
   if (!isExisted) {
-    res.status(404).send({ message: "Order not found" });
+    res.status(404).send({ message: "Order not found on shippingOrder" });
     return;
   }
   const shippingOrder = await shippingOrderService.getSingleShippingOrder({
@@ -44,10 +44,16 @@ const createShippingOrder = async (req, res, next) => {
       });
       return;
     }
-    let isExisted = await orderService.checkOrderIdExists(orderID);
-
+    let isExisted = await shippingOrderService.checkShippingOrderIdExists(orderID);
     if (isExisted) {
       res.status(403).send({ message: "ShippingOrder for orderID already existed" });
+      return;
+    }
+    isExisted = await hubOrderService.checkHubOrderIdExists(orderID);
+    if (!isExisted) {
+      res
+        .status(404)
+        .send({ message: "order doesnt exist on hubOrder/not shipped to endpointTransaction" });
       return;
     }
     // const order = new ShippingOrder(req.body);
@@ -67,10 +73,10 @@ const createShippingOrder = async (req, res, next) => {
 const updateShippingOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
-    let isExisted = await orderService.checkOrderIdExists(categoryId);
-
+    // check orderID exists
+    let isExisted = await shippingOrderService.checkShippingOrderIdExists(categoryId);
     if (!isExisted) {
-      res.status(404).send({ message: "Order not found" });
+      res.status(404).send({ message: "Order not found on shippingOrder" });
       return;
     }
     const updateShippingOrder = new ShippingOrder(req.body);
@@ -91,9 +97,10 @@ const updateShippingOrder = async (req, res, next) => {
 const deleteShippingOrder = async (req, res) => {
   try {
     const categoryId = req.params.id;
-    let isExisted = await orderService.checkOrderIdExists(categoryId);
+    // check orderID exists
+    let isExisted = await shippingOrderService.checkShippingOrderIdExists(categoryId);
     if (!isExisted) {
-      res.status(404).send({ message: "Order not found" });
+      res.status(404).send({ message: "Order not found on shippingOrder" });
       return;
     }
     await shippingOrderService.deleteShippingOrder(
