@@ -83,7 +83,7 @@ const updateOrder = async (req, res, next) => {
       res.status(404).send({ message: "Order not found" });
       return;
     }
-    const { shipStatus } = req.body;
+    const { shipStatus, receiveDate } = req.body;
     // const updateOrder = new Order(req.body);
     orderService.updateOrder(orderId, req.body, (err, result) => {
       if (err) {
