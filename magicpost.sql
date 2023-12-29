@@ -15,7 +15,7 @@ CREATE TABLE `transactionPoint`(
     transactionName VARCHAR(50) NOT NULL,
     transactionAddress VARCHAR(255) NOT NULL,
     hubID TINYINT UNSIGNED NOT NULL,
-    FOREIGN KEY(hubID) REFERENCES hub(hubID)
+    CONSTRAINT fk_hub_tran FOREIGN KEY(hubID) REFERENCES hub(hubID) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE `position` (
@@ -34,9 +34,9 @@ CREATE TABLE `account`(
     password VARCHAR(800),
     transactionID TINYINT UNSIGNED,
     hubID TINYINT UNSIGNED,
-    FOREIGN KEY(PositionID) REFERENCES `position`(positionID),
-    FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID),
-    FOREIGN KEY(hubID) REFERENCES hub(hubID)
+    FOREIGN KEY(PositionID) REFERENCES `position`(positionID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY(hubID) REFERENCES hub(hubID) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- hub/transactionID in all Order -> unsigned fk to account (not yet implemented)
@@ -57,7 +57,7 @@ CREATE TABLE `orders`(
     shipStatus VARCHAR(10) DEFAULT 'Pending',
     shippingFee VARCHAR(50),
     packageWeight VARCHAR(50),
-    FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID)
+    FOREIGN KEY(transactionID) REFERENCES transactionPoint(transactionID) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table transactionOrder: ship order from transaction to corresponding hub
@@ -68,7 +68,7 @@ CREATE TABLE `transactionOrder`(
     tSendDate DATE NOT NULL,
     tReceiveDate DATE,
     tShipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
+    FOREIGN KEY (orderID) REFERENCES `orders`(orderID) ON UPDATE CASCADE ON DELETE CASCADE 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table hubOrder: ship order from hub to endpoint's hub/corresponding transaction if same endpoint (somehow)
@@ -80,8 +80,8 @@ CREATE TABLE IF NOT EXISTS `hubOrder`(
     hSendDate DATE NOT NULL,
     hReceiveDate DATE,
     hShipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
-    FOREIGN KEY (orderID) REFERENCES orders(orderID)
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (orderID) REFERENCES orders(orderID) ON UPDATE CASCADE ON DELETE CASCADE 
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- Create table shippingOrder: order to receiver
@@ -93,8 +93,8 @@ CREATE TABLE `shippingOrder`(
     sendDate DATE NOT NULL,
     receiveDate DATE,
     shipStatus VARCHAR(10) DEFAULT 'Pending',
-    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID),
-    FOREIGN KEY (orderID) REFERENCES `orders`(orderID)
+    FOREIGN KEY (endpointID) REFERENCES transactionPoint(transactionID) ON UPDATE CASCADE ON DELETE CASCADE,
+    FOREIGN KEY (orderID) REFERENCES `orders`(orderID) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 INSERT INTO `hub` (`hubID`, `hubName`, `hubAddress`) VALUES

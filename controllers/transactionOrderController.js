@@ -103,7 +103,7 @@ const updateTransactionOrder = async (req, res, next) => {
   } catch (error) {}
 };
 
-const deleteTransactionOrder = async (req, res) => {
+const deleteTransactionOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
     let isExisted = await transactionOrderService.checkTransactionOrderIdExists(

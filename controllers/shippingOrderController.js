@@ -95,7 +95,7 @@ const updateShippingOrder = async (req, res, next) => {
   } catch (error) {}
 };
 
-const deleteShippingOrder = async (req, res) => {
+const deleteShippingOrder = async (req, res, next) => {
   try {
     const categoryId = req.params.id;
     // check orderID exists

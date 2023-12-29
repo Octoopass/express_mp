@@ -84,7 +84,7 @@ const updateTransactionPoint = async (req, res, next) => {
   }
 };
 
-const deleteTransactionPoint = async (req, res) => {
+const deleteTransactionPoint = async (req, res, next) => {
   try {
     const transactionId = req.params.id;
     let isExisted = await transactionPointService.checkTransactionIdExists(

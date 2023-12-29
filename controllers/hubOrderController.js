@@ -94,7 +94,7 @@ const updateHubOrder = async (req, res, next) => {
   } catch (error) {}
 };
 
-const deleteHubOrder = async (req, res) => {
+const deleteHubOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
     // check orderID exist

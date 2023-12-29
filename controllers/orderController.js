@@ -96,7 +96,7 @@ const updateOrder = async (req, res, next) => {
 };
 
 // Delete an order by ID
-const deleteOrder = async (req, res) => {
+const deleteOrder = async (req, res, next) => {
   try {
     const orderId = req.params.id;
     let isExisted = await orderService.checkOrderIdExists(orderId);
