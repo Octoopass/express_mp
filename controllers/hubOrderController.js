@@ -35,8 +35,8 @@ const getSingleHubOrder = async (req, res) => {
 
 const createHubOrder = async (req, res, next) => {
   try {
-    const { orderID, tShippingEmployeeName, tSendDate } = req.body;
-    if (!(orderID && tShippingEmployeeName && tSendDate)) {
+    const { orderID, endpointID, hShippingEmployeeName, hSendDate } = req.body;
+    if (!(orderID && endpointID && hShippingEmployeeName && hSendDate)) {
       res.status(400).json({
         message: "Not enough required informations",
       });

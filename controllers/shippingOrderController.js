@@ -6,11 +6,12 @@ const {
 const { hubOrderService } = require("../services/hubOrder");
 
 const getShippingOrders = async (req, res) => {
-  let { transactionId, hubId } = req.query;
-  const shippingOrders = await shippingOrderService.getShippingOrders({
-    transactionId,
-    hubId,
-  });
+  let { page, limit } = req.query;
+  let { transactionId, hubId } = req.body;
+  const shippingOrders = await shippingOrderService.getShippingOrders(
+    { page, limit },
+    { transactionId, hubId }
+  );
 
   res.send({
     data: shippingOrders,
@@ -87,7 +88,7 @@ const updateShippingOrder = async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.send({ message: "Edit order detail" });
+          res.send({ message: "Editted" });
         }
       }
     );

@@ -11,11 +11,11 @@ const shippingOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT O.*, transactionName, T.hubID, H.hubName FROM shippingOrder O
-          left join transactionPoint T on T.transactionId = O.transactionId
+          SELECT O.*, endpointID, transactionName as endpointName, T.hubID, H.hubName FROM shippingOrder O
+          left join transactionPoint T on T.transactionId = O.endpointID
           left join hub H on H.hubID = T.hubID 
           group by O.orderID
-          ${transactionId ? `having O.transactionId=${transactionId}` : ""}
+          ${transactionId ? `having endpointID=${transactionId}` : ""}
           ${hubId ? `having T.hubID=${hubId}` : ""}
           ${page ? `limit ${(page - 1) * limit}, ${limit} ` : ""} 
         `,
@@ -31,10 +31,10 @@ const shippingOrderService = {
     new Promise((resolve, reject) => {
       connection.query(
         `
-          SELECT O.*, transactionName FROM shippingOrder O
-          left join transactionPoint T on T.transactionID = O.transactionID
-          where O.orderID = '${id}'
-          group by O.orderID
+        SELECT O.*, transactionName as endpointName FROM shippingOrder O
+        left join transactionPoint T on T.transactionID = O.endpointID
+        where O.orderID = 1
+        group by O.orderID
         `,
         (error, results) => {
           if (error) {
