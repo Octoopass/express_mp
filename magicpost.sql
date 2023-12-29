@@ -155,11 +155,11 @@ VALUES
 (1, 5, 'Transactionemployee 11', '2023-12-30 10:00:00', '2023-12-30', 'Pending'),
 (3, 6, 'Transactionemployee 12', '2023-01-01 10:00:00','2023-01-01', 'Pending');
 
-INSERT INTO `hubOrder` (`orderID`, `hubID`, `endpointID`, `hShippingEmployeeName`, `hSendDate`, `hReceiveDate`, `hShipStatus`)
+INSERT INTO `hubOrder` (`orderID`, `endpointID`, `hShippingEmployeeName`, `hSendDate`, `hReceiveDate`, `hShipStatus`)
 VALUES
-(1, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
-(2, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
-(3, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
-(4, 1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
-(5, 3, 5, 'Hubemployee 3', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
-(6, 3, 6, 'Hubemployee 3', '2023-12-31 9:00:00', '2023-12-30 18:00:00', 'Pending');
+(1, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(2, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(3, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(4, 1, 'Hubemployee 1', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(5, 5, 'Hubemployee 3', '2023-12-30 9:00:00', '2023-12-29 16:00:00', 'Pending'),
+(6, 6, 'Hubemployee 3', '2023-12-31 9:00:00', '2023-12-30 18:00:00', 'Pending');
