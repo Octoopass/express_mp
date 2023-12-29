@@ -16,39 +16,39 @@ const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-const authorization = (req, res, next) => {
-  const token = req.cookies.token;
-  console.log("token", token);
-  if (!token) return res.sendStatus(403);
-  jwt.verify(token, SESSION_SECRET, (err, decoded) => {
-    console.log("verifying");
-    if (err) return res.sendStatus(403); //invalid token
-
-    console.log(decoded); //for correct token
-    next();
-  });
-};
-
 // const authorization = (req, res, next) => {
 //   const token = req.cookies.token;
 //   console.log("token", token);
-//   if (!token) {
-//     throw Error("403");
-//   }
-//   try {
-//     console.log("try");
-//     const data = jwt.verify(token, SESSION_SECRET);
-//     if (data.accountId) {
-//       req.userId = data.accountId;
-//     } else {
-//       throw Error;
-//     }
-//     return next();
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(403).send({ message: "Forbidden" });
-//   }
+//   if (!token) return res.sendStatus(403);
+//   jwt.verify(token, SESSION_SECRET, (err, decoded) => {
+//     console.log("verifying");
+//     if (err) return res.sendStatus(403); //invalid token
+
+//     console.log(decoded); //for correct token
+//     next();
+//   });
 // };
+
+const authorization = (req, res, next) => {
+  const token = req.cookies.token;
+  console.log("token", token);
+  if (!token) {
+    throw Error("403");
+  }
+  try {
+    console.log("try");
+    const data = jwt.verify(token, SESSION_SECRET);
+    if (data.accountId) {
+      req.userId = data.accountId;
+    } else {
+      throw Error;
+    }
+    return next();
+  } catch (err) {
+    console.log(err);
+    return res.status(403).send({ message: "Forbidden" });
+  }
+};
 
 const authorizePermissions = (...roles) => {
   return (req, res, next) => {

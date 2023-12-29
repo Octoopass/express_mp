@@ -19,7 +19,6 @@ const accountService = {
     connection.query(
       "SELECT * FROM account WHERE Username = ?",
       [data?.username, data?.password],
-
       callback
     );
   },

@@ -5,7 +5,7 @@ const { accountService, Account } = require("../services/account");
 const { hashPassword } = require("../middleware/auth");
 const { SESSION_SECRET } = require("../constants/config");
 
-const login = async (req, res, next) => {
+const login = (req, res, next) => {
   let { username, password } = req.body;
   if (username && password) {
     accountService.auth({ username }, async (error, results, fields) => {
@@ -32,7 +32,7 @@ const login = async (req, res, next) => {
                 if (err) {
                   console.error(err);
                 } else {
-                  res.send({ msg: "Success!" });
+                  res.send({ data: result });
                 }
               })
               .catch((err) => {
