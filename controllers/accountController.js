@@ -19,7 +19,7 @@ const login = (req, res, next) => {
         bcrypt.compare(password, user.password, (err, result) => {
           if (result) {
             const token = jwt.sign(
-              { username, accountId: user["AccountID"] },
+              { username, accountId: user["accountID"] },
               SESSION_SECRET,
               {
                 expiresIn: "1h",
@@ -27,7 +27,7 @@ const login = (req, res, next) => {
             );
             res.cookie("token", token);
             accountService
-              .getAccountDetail(user?.AccountID)
+              .getAccountDetail(user?.accountID)
               .then((result) => {
                 if (err) {
                   console.error(err);
