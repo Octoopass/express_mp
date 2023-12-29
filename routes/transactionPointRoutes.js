@@ -1,21 +1,18 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-    authorization,
-    authorizePermissions,
-} = require("../middleware/auth")
+const { authorization, authorizePermissions } = require("../middleware/auth");
 
 const {
-    getTransactionPoints,
-    createTransactionPoint,
-    updateTransactionPoint,
-    deleteTransactionPoint,
+  getTransactionPoints,
+  createTransactionPoint,
+  updateTransactionPoint,
+  deleteTransactionPoint,
 } = require("../controllers/transactionPointController");
 
-router.get("/", getTransactionPoints); // http://localhost:8080/transactionPoint
-router.post("/", createTransactionPoint); // http://localhost:8080/transactionPoint
-router.put("/:id", updateTransactionPoint); // http://localhost:8080/transactionPoint/id
-router.delete("/:id", deleteTransactionPoint); // http://localhost:8080/transactionPoint/id
+router.get("/", getTransactionPoints);
+router.post("/", createTransactionPoint);
+router.put("/:id", updateTransactionPoint);
+router.delete("/:id", deleteTransactionPoint);
 
 module.exports = router;

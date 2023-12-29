@@ -1,17 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-    authorization,
-    authorizePermissions
-} = require("../middleware/auth");
+const { authorization, authorizePermissions } = require("../middleware/auth");
 
 const {
-    getShippingOrders,
-    createShippingOrder,
-    updateShippingOrder,
-    deleteShippingOrder,
-    getSingleShippingOrder,
+  getShippingOrders,
+  createShippingOrder,
+  updateShippingOrder,
+  deleteShippingOrder,
+  getSingleShippingOrder,
 } = require("../controllers/shippingOrderController");
 
 router.get("/", getShippingOrders);

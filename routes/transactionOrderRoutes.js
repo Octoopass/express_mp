@@ -1,18 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-    getTransactionOrders,
-    getSingleTransactionOrder,
-    createTransactionOrder,
-    updateTransactionOrder,
-    deleteTransactionOrder,
-} = require("../controllers/transactionOrderController");
+const { authorization, authorizePermissions } = require("../middleware/auth");
 
 const {
-    authorization,
-    authorizePermissions,
-} = require("../middleware/auth");
+  getTransactionOrders,
+  getSingleTransactionOrder,
+  createTransactionOrder,
+  updateTransactionOrder,
+  deleteTransactionOrder,
+} = require("../controllers/transactionOrderController");
 
 router.get("/", getTransactionOrders);
 router.post("/", createTransactionOrder);
@@ -22,4 +19,3 @@ router.delete(":id", deleteTransactionOrder);
 router.get("/:id", getSingleTransactionOrder);
 
 module.exports = router;
-

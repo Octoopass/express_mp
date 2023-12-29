@@ -5,6 +5,7 @@ const {
 
 const { hubService } = require("../services/hub");
 
+// Get all transaction points
 const getTransactionPoints = async (req, res) => {
   const transactionPoints =
     await transactionPointService.getTransactionPoints();
@@ -14,6 +15,7 @@ const getTransactionPoints = async (req, res) => {
   });
 };
 
+// Create transaction point
 const createTransactionPoint = async (req, res, next) => {
   try {
     const { transactionName, transactionAddress, hubID } = req.body;
@@ -23,7 +25,7 @@ const createTransactionPoint = async (req, res, next) => {
       });
       return;
     }
-
+    // check if hubID exist
     let isExisted = await hubService.checkHubIdExists(hubID);
 
     if (!isExisted) {
@@ -43,13 +45,14 @@ const createTransactionPoint = async (req, res, next) => {
   }
 };
 
+// Update transaction point
 const updateTransactionPoint = async (req, res, next) => {
   const transactionId = req.params.id;
   try {
     let isExisted = await transactionPointService.checkTransactionIdExists(
       transactionId
     );
-
+    // check if transactionID exists
     if (!isExisted) {
       res.status(404).send({ message: "TransactionPoint not found" });
       return;
@@ -84,12 +87,14 @@ const updateTransactionPoint = async (req, res, next) => {
   }
 };
 
+// Delete transaction point
 const deleteTransactionPoint = async (req, res, next) => {
   try {
     const transactionId = req.params.id;
     let isExisted = await transactionPointService.checkTransactionIdExists(
       transactionId
     );
+    // check if transactionID exists
     if (!isExisted) {
       res.status(404).send({ message: "TransactionPoint not found" });
       return;

@@ -1,18 +1,15 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-    getHubOrders,
-    getSingleHubOrder,
-    createHubOrder,
-    updateHubOrder,
-    deleteHubOrder,
-} = require("../controllers/hubOrderController");
+const { authorization, authorizePermissions } = require("../middleware/auth");
 
 const {
-    authorization,
-    authorizePermissions,
-} = require("../middleware/auth");
+  getHubOrders,
+  getSingleHubOrder,
+  createHubOrder,
+  updateHubOrder,
+  deleteHubOrder,
+} = require("../controllers/hubOrderController");
 
 router.get("/", getHubOrders);
 router.post("/", createHubOrder);
@@ -22,4 +19,3 @@ router.delete(":id", deleteHubOrder);
 router.get("/:id", getSingleHubOrder);
 
 module.exports = router;
-

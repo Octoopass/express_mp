@@ -5,9 +5,12 @@ const {
 
 const { orderService } = require("../services/order");
 
+// Get all transaction order to hub
 const getTransactionOrders = async (req, res) => {
   let { page, limit } = req.query;
-  let { transactionId, hubId } = req.body;
+  // select transactionId: all transactionOrder send from requestedId
+  // select hubId: all transactionOrder receive at hub with requestedId
+  let { transactionId, hubId } = req.body; 
   const transactionOrders = await transactionOrderService.getTransactionOrders(
     { page, limit },
     { transactionId, hubId }
@@ -37,6 +40,7 @@ const getSingleTransactionOrder = async (req, res) => {
   });
 };
 
+// Create transaction order for existing order to send to hub
 const createTransactionOrder = async (req, res, next) => {
   try {
     const { orderID, tShippingEmployeeName, tSendDate } = req.body;
@@ -76,6 +80,7 @@ const createTransactionOrder = async (req, res, next) => {
   }
 };
 
+// Update transaction order
 const updateTransactionOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
@@ -103,6 +108,7 @@ const updateTransactionOrder = async (req, res, next) => {
   } catch (error) {}
 };
 
+// Delete transaction order
 const deleteTransactionOrder = async (req, res, next) => {
   const categoryId = req.params.id;
   try {
@@ -121,7 +127,7 @@ const deleteTransactionOrder = async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.send({ msg: "Delete succesful" });
+          res.send({ msg: "Delete success!" });
         }
       }
     );

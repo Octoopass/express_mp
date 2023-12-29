@@ -38,24 +38,25 @@ const authorization = (req, res, next) => {
 };
 
 const positionIdToRole = {
-  1: 'Dev',
-  2: 'headAdmin',
-  3: 'hubAdmin',
-  4: 'transactionAdmin',
-  5: 'hubEmployee',
-  6: 'transactionEmployee'
+  1: "Dev",
+  2: "headAdmin",
+  3: "hubAdmin",
+  4: "transactionAdmin",
+  5: "hubEmployee",
+  6: "transactionEmployee",
 };
 
-const authorizePermissions = (...roles) => (req, res, next) => {
-  const token = req.cookies.token;
-  const data = jwt.verify(token, SESSION_SECRET);
-  const role = positionIdToRole[data.positionId[0].PositionID];
-  if (!roles.includes(role)) {
-    return res.status(401).send("Unauthorized");
-  }
-  next();
-};
-
+const authorizePermissions =
+  (...roles) =>
+  (req, res, next) => {
+    const token = req.cookies.token;
+    const data = jwt.verify(token, SESSION_SECRET);
+    const role = positionIdToRole[data.positionId[0].PositionID];
+    if (!roles.includes(role)) {
+      return res.status(401).send("Unauthorized");
+    }
+    next();
+  };
 
 module.exports = {
   hashPassword,

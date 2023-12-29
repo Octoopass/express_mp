@@ -110,7 +110,7 @@ const deleteShippingOrder = async (req, res, next) => {
         if (err) {
           next(err);
         } else {
-          res.send({ msg: "Delete succesful" });
+          res.send({ msg: "Delete success!" });
         }
       }
     );

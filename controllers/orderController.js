@@ -1,4 +1,7 @@
 const { Order, orderService } = require("../services/order");
+const { transactionOrderService } = require("../services/transactionOrder");
+const { hubOrderService } = require("../services/hubOrder");
+const { shippingOrderService } = require("../services/shippingOrder");
 
 const getOrders = async (req, res) => {
   let { page, limit } = req.query;
@@ -22,6 +25,42 @@ const getSingleOrder = async (req, res) => {
 
   res.send({
     data: order,
+  });
+};
+
+const getSuperSingleOrder = async (req, res) => {
+  const orderId = req.params.id;
+  let isExisted = await orderService.checkOrderIdExists(orderId);
+
+  if (!isExisted) {
+    res.status(404).send({ message: "Order not found" });
+    return;
+  }
+  const order = await orderService.getSingleOrder(orderId);
+
+  isExisted = await transactionOrderService.checkTransactionOrderIdExists(orderId);
+  const transactionOrder = undefined;
+  if (isExisted) {
+    transactionOrder = await transactionOrderService.getSingleTransactionOrder(orderId);
+  }
+
+  isExisted = await hubOrderService.checkHubOrderIdExists(orderId);
+  const hubOrder = undefined;
+  if (isExisted) {
+    hubOrder = await hubOrderService.getSingleHubOrder(orderId);
+  }
+
+  isExisted = await shippingOrderService.checkShippingOrderIdExists(orderId);
+  const shippingOrder = undefined;
+  if (isExisted) {
+    shippingOrder = await shippingOrderService.getSingleShippingOrder(orderId);
+  }  
+
+  res.send({
+    order: order,
+    transactionOrder: transactionOrder,
+    hubOrder: hubOrder,
+    shippingOrder: shippingOrder 
   });
 };
 
@@ -119,6 +158,7 @@ const deleteOrder = async (req, res, next) => {
 module.exports = {
   getOrders,
   getSingleOrder,
+  getSuperSingleOrder,
   createOrder,
   updateOrder,
   deleteOrder,
