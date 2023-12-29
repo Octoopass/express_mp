@@ -21,7 +21,7 @@ const hubOrderRoute = require("./routes/hubOrderRoutes");
 
 // var path = require("path");
 
-const { CORS_URLS } = require("../constants/config");
+const { CORS_URLS } = require("./constants/config");
 
 // app.set("views", path.join(__dirname, "/views"));
 // app.set("view engine", "ejs");
