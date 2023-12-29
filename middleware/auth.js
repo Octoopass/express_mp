@@ -16,25 +16,12 @@ const hashPassword = async (password) => {
   return hashedPassword;
 };
 
-// const authorization = (req, res, next) => {
-//   const token = req.cookies.token;
-//   console.log("token", token);
-//   if (!token) return res.sendStatus(403);
-//   jwt.verify(token, SESSION_SECRET, (err, decoded) => {
-//     console.log("verifying");
-//     if (err) return res.sendStatus(403); //invalid token
-
-//     console.log(decoded); //for correct token
-//     next();
-//   });
-// };
-
 const authorization = (req, res, next) => {
   const token = req.cookies.token;
-  console.log("token", token);
   if (!token) {
-    throw Error("403");
+    throw Error;
   }
+  console.log("token", token);
   try {
     console.log("try");
     const data = jwt.verify(token, SESSION_SECRET);
@@ -50,13 +37,23 @@ const authorization = (req, res, next) => {
   }
 };
 
-const authorizePermissions = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(401).json("Unauthorized")
-    }
-    next();
-  };
+const positionIdToRole = {
+  1: 'Dev',
+  2: 'headAdmin',
+  3: 'hubAdmin',
+  4: 'transactionAdmin',
+  5: 'hubEmployee',
+  6: 'transactionEmployee'
+};
+
+const authorizePermissions = (...roles) => (req, res, next) => {
+  const token = req.cookies.token;
+  const data = jwt.verify(token, SESSION_SECRET);
+  const role = positionIdToRole[data.positionId[0].PositionID];
+  if (!roles.includes(role)) {
+    return res.status(401).send("Unauthorized");
+  }
+  next();
 };
 
 

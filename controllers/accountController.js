@@ -16,10 +16,11 @@ const login = (req, res, next) => {
         req.session.loggedin = true;
         req.session.username = username;
         const user = results[0];
-        bcrypt.compare(password, user.password, (err, result) => {
+        bcrypt.compare(password, user.password, async (err, result) => {
           if (result) {
+            const positionId = await accountService.getAccountPosition(user?.accountID);
             const token = jwt.sign(
-              { username, accountId: user["accountID"] },
+              { username, accountId: user["accountID"], positionId },
               SESSION_SECRET,
               {
                 expiresIn: "1h",

@@ -4,12 +4,12 @@ This is the backend of the project magicpost.
 ### Getting started
 ```
 # Clone this repo to your local machine using
-git clone 
+git clone https://github.com/Octoopass/express_mp.git
 
 # Get into the directory
-cd 
+cd express_mp
 
-# Edit .env file and add your mysql username, mysql password and db name
+# Edit .env file and add your mysql username, mysql password 
 
 # Import mysql database using Command line
 mysql -u [db_username] -p[db_password] < magicpost.sql
